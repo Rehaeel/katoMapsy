@@ -1,0 +1,21 @@
+{
+  "name": "katomapsy",
+  "description": "http://52.66.40.75/box_5d9117d87b2464bb532c",
+  "version": "1.0.0",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^14.3.0",
+    "express": "^4.17.2",
+    "mysql": "^2.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rehaeel/katoMapsy.git"
+  },
+  "author": "Rafał Prokopiak",
+  "license": "ISC"
+}
