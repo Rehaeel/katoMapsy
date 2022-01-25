@@ -15,10 +15,10 @@ const mapsy = mysql.createConnection({
 
 /////////// USER
 app.post('/user', (req, res) => {
-	const { userName, password, name } = req.headers;
+	const { username, password, name } = req.headers;
 
 	mapsy.query(
-		`INSERT INTO users (userName, password, name) VALUES ('${userName}', '${password}', '${name}');`,
+		`INSERT INTO users (userName, password, name) VALUES ('${username}', '${password}', '${name}');`,
 		(err, result) => {
 			if (err) console.error(err);
 
