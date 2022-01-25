@@ -7,35 +7,61 @@ const PORT = process.env.DB_PORT;
 
 app.use(cors());
 app.use(express.json());
-const mystery = mysql.createConnection({
+const mapsy = mysql.createConnection({
 	user: process.env.DB_USER,
 	host: process.env.DB_HOST,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE,
 });
 
-/////////// STAN
-app.get('/state', (req, res) => {
-	mystery.query('SELECT * FROM mysteriesState', (err, result) => {
-		if (err) {
-			console.log(err);
-		} else {
+/////////// USER
+app.post('/user', (req, res) => {
+	const { userName, password, name } = req.params;
+
+	mapsy.query(
+		`INSERT INTO users (userName, password, name) VALUES ('${userName}', '${password}', '${name}');`,
+		(err, result) => {
+			if (err) throw err;
+
 			res.send(result);
 		}
+	);
+});
+
+app.get('/user', (req, res) => {
+	const { userName, password } = req.params;
+
+	mapsy.query(
+		`SELECT * FROM users WHERE userName='${userName}' AND password='${password}'`,
+		(err, result) => {
+			if (err) throw err;
+
+			res.send(result);
+		}
+	);
+});
+
+/////////// MAPS
+
+app.get('/church/all', (_, res) => {
+	mapsy.query(`SELECT * FROM churches`, (err, result) => {
+		if (err) throw err;
+
+		res.send(result);
 	});
 });
 
-/////////// STAN
-app.get('/state', (req, res) => {
-	mystery.query('SELECT * FROM mysteriesState', (err, result) => {
-		if (err) {
-			console.log(err);
-		} else {
+app.get('/church/:id', (req, res) => {
+	const churchId = req.params.id;
+
+	mapsy.query(
+		`SELECT * FROM churches WHERE id='${churchId}'`,
+		(err, result) => {
+			if (err) throw err;
+
 			res.send(result);
 		}
-	});
+	);
 });
 
-app.listen(process.env.PORT || PORT, () => {
-	console.log(`My DB run on ${PORT} port`);
-});
+app.listen(process.env.PORT || PORT);
