@@ -16,7 +16,7 @@ const mapsy = mysql.createConnection({
 
 /////////// USER
 app.post('/user', (req, res) => {
-	const { userName, password, name } = req.body;
+	const { userName, password, name } = req.headers;
 
 	mapsy.query(
 		`INSERT INTO users (userName, password, name) VALUES ('${userName}', '${password}', '${name}');`,
@@ -29,7 +29,7 @@ app.post('/user', (req, res) => {
 });
 
 app.get('/user', (req, res) => {
-	const { userName, password } = req.body;
+	const { userName, password } = req.headers;
 
 	mapsy.query(
 		`SELECT * FROM users WHERE userName='${userName}' AND password='${password}'`,
