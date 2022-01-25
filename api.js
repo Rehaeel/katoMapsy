@@ -31,7 +31,7 @@ app.get('/user', (req, res) => {
 	const { username, password } = req.headers;
 
 	mapsy.query(
-		`SELECT (name) FROM users WHERE userName='${username}' AND password='${password}'`,
+		`SELECT userName, name FROM users WHERE userName='${username}' AND password='${password}'`,
 		(err, result) => {
 			if (err) console.error(err);
 
