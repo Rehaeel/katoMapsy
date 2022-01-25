@@ -1,0 +1,22 @@
+:root {
+	--dark-green: #3d550c;
+	--green: #59981a;
+	--light-green: #81b622;
+	--yellow: #ecf87f;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
