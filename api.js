@@ -31,7 +31,7 @@ app.get('/user', (req, res) => {
 	const { email, password } = req.headers;
 
 	mapsy.query(
-		`SELECT email, name FROM users WHERE userName='${email}' AND password='${password}'`,
+		`SELECT email, name FROM users WHERE email='${email}' AND password='${password}'`,
 		(err, result) => {
 			if (err) console.error(err);
 
