@@ -42,8 +42,24 @@ app.get('/user', (req, res) => {
 			const rowsMatched = result.message.slice(15, 17);
 
 			if (rowsMatched == 0) return res.send('zły email lub hasło');
-			
-			res.send(token)
+
+			res.send(token);
+		}
+	);
+});
+
+// fetch user
+app.get('/user/:token', (req, res) => {
+	const { token } = req.params;
+
+	mapsy.query(
+		`SELECT name FROM users WHERE token='${token}'`,
+		(err, result) => {
+			if (err) res.send(err);
+			if (result.length === 0)
+				return res.send('nie ma takiego użytkownika');
+
+			res.send(result[0].name);
 		}
 	);
 });
