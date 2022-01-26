@@ -40,16 +40,10 @@ app.get('/user', (req, res) => {
 		(err, result) => {
 			if (err) return res.send(err);
 			const rowsMatched = result.message.slice(15, 17);
-			if (rowsMatched == 0) return res.send('zły email lub hasło');
-		}
-	);
 
-	mapsy.query(
-		`SELECT name FROM users WHERE email='${email}' AND password='${password}'`,
-		(_, result)=> {
-			if (result.length === 0) return;
-			const {name} = result[0];
-			res.send({token, name})
+			if (rowsMatched == 0) return res.send('zły email lub hasło');
+			
+			res.send(token)
 		}
 	);
 });
