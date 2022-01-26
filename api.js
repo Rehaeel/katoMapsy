@@ -16,32 +16,50 @@ const mapsy = mysql.createConnection({
 
 /////////// USER
 //register
-app.post('/user', (req, res) => {
-	const { username, password, name } = req.headers;
+app.post('/user', async (req, res, next) => {
+	const { email, password, name } = req.headers;
 	const token = randToken.generate(256);
 
-	mapsy.query(
-		`INSERT INTO users (userName, password, name, token) VALUES ('${username}', '${password}', '${name}', ${token});`,
-		(err, result) => {
-			if (err) console.error(err);
+	let shouldContinue = true;
 
-			res.send(result);
+	mapsy.query(
+		`SELECT token FROM users WHERE email='${email}'`,
+		(_, response) => {
+			if (response.length === 0) return;
+
+			shouldContinue = false;
+			res.status(400).json('email jest już zajęty');
+			next();
+		}
+	);
+
+	mapsy.query(
+		`INSERT INTO users (email, password, name, token) VALUES ('${email}', '${password}', '${name}', '${token}')`,
+		(_, result) => {
+			if (shouldContinue) res.send(token);
 		}
 	);
 });
 
 // login
-app.get('/user', (req, res) => {
+app.get('/user', (req, res, next) => {
 	const { email, password } = req.headers;
 	const token = randToken.generate(256);
 
 	mapsy.query(
 		`UPDATE users SET token='${token}' WHERE email='${email}' AND password='${password}'`,
 		(err, result) => {
-			if (err) return res.send(err);
+			if (err) {
+				res.status(400).json(err);
+				return next();
+			}
+
 			const rowsMatched = result.message.slice(15, 17);
 
-			if (rowsMatched == 0) return res.send('zły email lub hasło');
+			if (rowsMatched == 0) {
+				res.status(400).json('zły email lub hasło');
+				return next();
+			}
 
 			res.send(token);
 		}
@@ -49,15 +67,16 @@ app.get('/user', (req, res) => {
 });
 
 // fetch user
-app.get('/user/:token', (req, res) => {
+app.get('/user/:token', (req, res, next) => {
 	const { token } = req.params;
 
 	mapsy.query(
 		`SELECT name FROM users WHERE token='${token}'`,
-		(err, result) => {
-			if (err) res.send(err);
-			if (result.length === 0)
-				return res.send('nie ma takiego użytkownika');
+		(_, result) => {
+			if (result.length === 0) {
+				res.status(404).json('nie ma takiego użytkownika');
+				return next();
+			}
 
 			res.send(result[0].name);
 		}
