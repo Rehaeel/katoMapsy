@@ -3,6 +3,7 @@ const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
 require('dotenv').config();
+const randToken = require('rand-token');
 
 app.use(cors());
 app.use(express.json());
@@ -14,11 +15,13 @@ const mapsy = mysql.createConnection({
 });
 
 /////////// USER
+//register
 app.post('/user', (req, res) => {
 	const { username, password, name } = req.headers;
+	const token = randToken.generate(256);
 
 	mapsy.query(
-		`INSERT INTO users (userName, password, name) VALUES ('${username}', '${password}', '${name}');`,
+		`INSERT INTO users (userName, password, name, token) VALUES ('${username}', '${password}', '${name}', ${token});`,
 		(err, result) => {
 			if (err) console.error(err);
 
@@ -27,15 +30,26 @@ app.post('/user', (req, res) => {
 	);
 });
 
+// login
 app.get('/user', (req, res) => {
 	const { email, password } = req.headers;
+	const token = randToken.generate(256);
 
 	mapsy.query(
-		`SELECT email, name FROM users WHERE email='${email}' AND password='${password}'`,
+		`UPDATE users SET token='${token}' WHERE email='${email}' AND password='${password}'`,
 		(err, result) => {
-			if (err) console.error(err);
+			if (err) return res.send(err);
+			const rowsMatched = result.message.slice(15, 17);
+			if (rowsMatched == 0) return res.send('zły email lub hasło');
+		}
+	);
 
-			res.send(result);
+	mapsy.query(
+		`SELECT name FROM users WHERE email='${email}' AND password='${password}'`,
+		(_, result)=> {
+			if (result.length === 0) return;
+			const {name} = result[0];
+			res.send({token, name})
 		}
 	);
 });
