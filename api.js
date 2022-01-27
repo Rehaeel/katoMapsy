@@ -22,23 +22,27 @@ app.post('/user', async (req, res, next) => {
 
 	let shouldContinue = true;
 
-	mapsy.query(
-		`SELECT token FROM users WHERE email='${email}'`,
-		(_, response) => {
-			if (response.length === 0) return;
+	new Promise((success, error) => {
+		mapsy.query(
+			`SELECT token FROM users WHERE email='${email}'`,
+			(_, response) => {
+				if (response.length === 0) return success();
 
-			shouldContinue = false;
-			res.status(400).json('email jest już zajęty');
-			next();
-		}
-	);
-
-	mapsy.query(
-		`INSERT INTO users (email, password, name, token) VALUES ('${email}', '${password}', '${name}', '${token}')`,
-		(_, result) => {
-			if (shouldContinue) res.send(token);
-		}
-	);
+				shouldContinue = false;
+				res.status(400).json('email jest już zajęty');
+				next();
+				return success('email jest juz zajety');
+			}
+		);
+	}).then((isTaken) => {
+		if (isTaken) return;
+		mapsy.query(
+			`INSERT INTO users (email, password, name, token) VALUES ('${email}', '${password}', '${name}', '${token}')`,
+			(_, result) => {
+				if (shouldContinue) res.send(token);
+			}
+		);
+	});
 });
 
 // login
