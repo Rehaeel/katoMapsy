@@ -1,28 +1,46 @@
-import { useDispatch, useSelector } from 'react-redux';
-import './App.css';
-import { selectUser } from './store/selectors';
-import { getUserThunk } from './store/user/thunks';
-import store from './store/store';
 import { useEffect } from 'react';
-import { actionSetUser } from './store/user/actionCreator';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+
+import store from './store/store';
+import { thunkFetchUser } from './store/user/thunks';
+
+import './App.css';
+import FullWidthContainer from './components/helpers/fullWidthContainer';
+import Login from './components/login/login';
+import Registration from './components/register/registration';
+import Header from './components/header/header';
+import SpinningWheel from './components/helpers/spinningWheel';
 
 function App() {
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (window.localStorage.getItem('name'))
-			return dispatch(actionSetUser(window.localStorage.getItem('name')));
-
-		const headersToFetch = {
-			userName: 'rafal_pro',
-			password: 'password',
-		};
-
-		dispatch(getUserThunk(headersToFetch));
+		if (window.localStorage.getItem('token'))
+			dispatch(thunkFetchUser(window.localStorage.getItem('token')));
+		else if (
+			window.location.pathname !== '/login' &&
+			window.location.pathname !== '/register'
+		)
+			navigate('/login');
 	}, []);
 
-	return <h1>Hello {user.name}</h1>;
+	console.log(store.getState().user);
+
+	return (
+		<>
+			<Header />
+			<FullWidthContainer isFullHeight={true}>
+				{/* <SpinningWheel /> */}
+				<Routes>
+					<Route exact path='/' element='' />
+					<Route path='/login' element={<Login />} />
+					<Route path='/register' element={<Registration />} />
+				</Routes>
+			</FullWidthContainer>
+		</>
+	);
 }
 
 export default App;

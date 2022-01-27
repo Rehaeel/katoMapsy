@@ -3,20 +3,38 @@
 	--green: #59981a;
 	--light-green: #81b622;
 	--yellow: #ecf87f;
+	--red: #f44c29;
+
+	--gap: 15px;
+	--nav-height: 70px;
 }
 
 body {
 	margin: 0;
 	padding: 0;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 }
 
 * {
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: var(--light-green);
+	font-weight: bold;
+}
+
+.vertical-flex {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: var(--gap);
+	margin: var(--gap) 0;
+}
+
+.spin-wrapper .uil-spin-css > div > div {
+	background: var(--green) !important;
 }

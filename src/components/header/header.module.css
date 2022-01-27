@@ -1,0 +1,25 @@
+.header {
+	width: 100vw;
+	height: var(--nav-height);
+	display: flex;
+	background-color: #333;
+	color: #fff;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 5%;
+}
+
+.header > img {
+	max-height: 90%;
+	filter: drop-shadow(0 0  5px rgba(89, 152, 26, 0.5));
+}
+
+.user {
+	display: flex;
+	gap: calc(var(--gap) * 2);
+	align-items: center;
+}
+
+.user > * {
+	white-space: nowrap;
+}

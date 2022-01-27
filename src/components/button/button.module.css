@@ -1,0 +1,19 @@
+.button {
+	padding: 8px 20px;
+	background-color: var(--green);
+	border: 1px solid var(--dark-green);
+	color: #fff;
+	font-size: 1rem;
+	border-radius: 5px;
+	width: 100%;
+	box-shadow: 5px 5px 10px rgba(89, 152, 26, 0.5);
+	border-top: 1.5px solid var(--light-green);
+	border-left: 1.5px solid var(--light-green);
+	cursor: pointer;
+}
+
+/* @media screen and (max-width: 765px) {
+	.button {
+		width: 100%;
+	}
+} */
