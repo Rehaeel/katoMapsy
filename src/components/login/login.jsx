@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import sha256 from 'sha256';
 import { thunkLoginUser, thunkFetchUser } from '../../store/user/thunks';
 
@@ -10,6 +10,7 @@ import styles from './login.module.css';
 
 const Login = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const [wrongInput, setWrongInput] = useState();
@@ -24,12 +25,12 @@ const Login = () => {
 		dispatch(thunkLoginUser(user))
 			.then((token) => {
 				setWrongInput(false);
-				emailRef.current.value = '';
-				passwordRef.current.value = '';
+				emailRef.current.value = passwordRef.current.value = '';
 				return token.token;
 			})
 			.then((token) => {
 				dispatch(thunkFetchUser(token));
+				navigate('/');
 			})
 			.catch((err) => {
 				setWrongInput(true);
@@ -50,6 +51,7 @@ const Login = () => {
 					placeholder='email'
 					thisRef={emailRef}
 					error={wrongInput}
+					required={true}
 				/>
 				<Input
 					labelText='hasło'
@@ -57,6 +59,7 @@ const Login = () => {
 					placeholder='hasło'
 					thisRef={passwordRef}
 					error={wrongInput}
+					required={true}
 				/>
 
 				<Button type='submit'>Wskakuj !</Button>

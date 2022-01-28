@@ -1,9 +1,0 @@
-.input-label {
-	display: flex;
-	flex-direction: column;
-	gap: calc(var(--gap) / 3);
-}
-
-.input-label > input {
-	padding: 5px 8px;
-}

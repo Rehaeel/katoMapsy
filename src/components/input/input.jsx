@@ -1,16 +1,20 @@
-import styles from './input.module.css';
+import { TextField } from '@mui/material';
 
 const Input = (props) => {
 	return (
-		<label className={styles['input-label']}>
-			{props.labelText}
-			<input
-				type={props.type ?? 'text'}
-				placeholder={props.placeholder}
-				className={props.wrongInput ? 'bad-input' : ''}
-				ref={props.thisRef}
-			/>
-		</label>
+		<TextField
+			label={props.labelText}
+			required={props.required}
+			type={props.type}
+			helperText={props.helperText}
+			placeholder={props.placeholder}
+			autoFocus={props.autoFocus ?? false}
+			fullWidth={false}
+			inputRef={props.thisRef}
+			variant='outlined'
+			error={props.error}
+			color={props.error ? 'error' : 'success'}
+		/>
 	);
 };
 

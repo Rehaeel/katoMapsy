@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import store from './store/store';
 import { thunkFetchUser } from './store/user/thunks';
@@ -11,6 +11,7 @@ import Login from './components/login/login';
 import Registration from './components/register/registration';
 import Header from './components/header/header';
 import SpinningWheel from './components/helpers/spinningWheel';
+import Dashboard from './components/dashboard/dashboard';
 
 function App() {
 	const dispatch = useDispatch();
@@ -26,7 +27,8 @@ function App() {
 			navigate('/login');
 	}, []);
 
-	console.log(store.getState().user);
+	console.log(store.getState());
+	// console.log();
 
 	return (
 		<>
@@ -34,7 +36,7 @@ function App() {
 			<FullWidthContainer isFullHeight={true}>
 				{/* <SpinningWheel /> */}
 				<Routes>
-					<Route exact path='/' element='' />
+					<Route exact path='/' element={<Dashboard />} />
 					<Route path='/login' element={<Login />} />
 					<Route path='/register' element={<Registration />} />
 				</Routes>

@@ -1,0 +1,27 @@
+.church-list {
+	box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: var(--gap);
+	padding-top: 0;
+}
+
+.church-list > h1:first-child {
+	border-bottom: 1px solid var(--cl-main);
+	width: 80%;
+	text-align: center;
+	padding-top: calc(var(--gap) * 1.5);
+	padding-bottom: var(--gap);
+	margin-bottom: calc(var(--gap) * 2);
+}
+
+.list {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: start;
+	gap: var(--gap);
+}

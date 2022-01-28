@@ -1,12 +1,13 @@
 :root {
-	--dark-green: #3d550c;
-	--green: #59981a;
-	--light-green: #81b622;
+	--cl-dark: #3d550c;
+	--cl-main: #59981a;
+	--cl-light: #81b622;
 	--yellow: #ecf87f;
 	--red: #f44c29;
 
 	--gap: 15px;
-	--nav-height: 70px;
+	--nav-height: 60px;
+	--border-radius: 8px;
 }
 
 body {
@@ -22,8 +23,12 @@ body {
 
 a {
 	text-decoration: none;
-	color: var(--light-green);
+	color: var(--cl-light);
 	font-weight: bold;
+}
+
+img {
+	max-width: 100%;
 }
 
 .vertical-flex {
@@ -36,5 +41,10 @@ a {
 }
 
 .spin-wrapper .uil-spin-css > div > div {
-	background: var(--green) !important;
+	background: var(--cl-main) !important;
+}
+
+#map {
+	width: 100%;
+	height: 500px;
 }
