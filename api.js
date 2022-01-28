@@ -17,7 +17,7 @@ const mapsy = mysql.createConnection({
 /////////// USER
 //register
 app.post('/user', async (req, res, next) => {
-	const { email, password, name } = req.headers;
+	const { email, password, name } = req.body;
 	const token = randToken.generate(256);
 
 	let shouldContinue = true;
