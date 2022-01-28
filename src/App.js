@@ -10,7 +10,6 @@ import FullWidthContainer from './components/helpers/fullWidthContainer';
 import Login from './components/login/login';
 import Registration from './components/register/registration';
 import Header from './components/header/header';
-import SpinningWheel from './components/helpers/spinningWheel';
 import Dashboard from './components/dashboard/dashboard';
 
 function App() {
@@ -28,13 +27,11 @@ function App() {
 	}, []);
 
 	console.log(store.getState());
-	// console.log();
 
 	return (
 		<>
 			<Header />
 			<FullWidthContainer isFullHeight={true}>
-				{/* <SpinningWheel /> */}
 				<Routes>
 					<Route exact path='/' element={<Dashboard />} />
 					<Route path='/login' element={<Login />} />
