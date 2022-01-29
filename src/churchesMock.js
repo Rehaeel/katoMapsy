@@ -6,7 +6,7 @@ export const churchesMock = [
 		adress: 'Skwer św. Maksymiliana Kolbego 1, 93-279',
 		link: 'https://www.google.com/maps/place/Parafia+pw.+%C5%9Bw.+Maksymiliana+Kolbego+na+D%C4%85browie/@51.7331968,19.494628,19.96z/data=!4m5!3m4!1s0x471a35eb422aa0fb:0xec8740dab14944cc!8m2!3d51.73338!4d19.4944379',
 		creator: 'Rafał',
-		website: '',
+		website: 'http://archidiecezja.lodz.pl/dabrowa/',
 		hours: '18:30',
 	},
 	{

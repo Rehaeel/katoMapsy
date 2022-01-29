@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import store from './store/store';
 import { thunkFetchUser } from './store/user/thunks';
 
-import './App.css';
 import FullWidthContainer from './components/helpers/fullWidthContainer';
 import Login from './components/login/login';
 import Registration from './components/register/registration';

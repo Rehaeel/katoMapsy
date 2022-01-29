@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as select from '../../store/selectors';
 
 import styles from './dashboard.module.css';
@@ -11,22 +11,25 @@ import MapDisplay from './map/map';
 import SpinningWheel from '../helpers/spinningWheel';
 
 const Dashboard = () => {
-	const churches = useSelector(select.selectChurch);
 	const user = useSelector(select.selectUser);
-	// const church = useSelector(select.selectCurrentChurch);
+	const [showForm, setShowForm] = useState(false);
 
-	const [markerPos, setMarkerPos] = useState(getMapCoords(churches[0].link));
-	const [mapZoomLevel, setMapZoomLevel] = useState(6);
+	const [mapPosition, setMapPosition] = useState([51.919437, 19.145136]);
+	const [mapZoomLevel, setMapZoomLevel] = useState(7);
 
 	return user.isAuth ? (
 		<section className={styles.dashboard}>
 			<ChurchList
 				setMapZoomLevel={setMapZoomLevel}
-				setMarkerPos={setMarkerPos}
+				setMarkerPos={setMapPosition}
+				showForm={setShowForm}
 			/>
-			<section className={styles.form}>
-				<ChurchForm />
-				<MapDisplay mapZoomLevel={mapZoomLevel} markerPos={markerPos} />
+			<section className={styles.details}>
+				<ChurchForm showForm={showForm} />
+				<MapDisplay
+					mapZoomLevel={mapZoomLevel}
+					position={mapPosition}
+				/>
 			</section>
 		</section>
 	) : (

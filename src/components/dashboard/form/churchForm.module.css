@@ -1,0 +1,23 @@
+.form {
+	position: relative;
+	height: auto;
+	width: 100%;
+	z-index: 0;
+}
+
+.form > div {
+	z-index: 1 !important;
+	transition: all 0.8s ease;
+}
+
+.form > div > h1 {
+	text-align: center;
+	width: 100%;
+}
+
+.form > div > form {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: var(--gap);
+	margin: var(--gap);
+}

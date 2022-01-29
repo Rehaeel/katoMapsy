@@ -7,11 +7,12 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 5%;
+	z-index: 999;
 }
 
 .header > img {
 	max-height: 90%;
-	filter: drop-shadow(0 0  5px rgba(89, 152, 26, 0.5));
+	filter: drop-shadow(0 0 5px rgba(89, 152, 26, 0.5));
 }
 
 .user {

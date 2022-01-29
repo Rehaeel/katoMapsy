@@ -1,22 +1,29 @@
 import styles from './churchList.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectChurch, selectCurrentChurch } from '../../../../store/selectors';
+import { selectChurch } from '../../../../store/selectors';
 
 import Button from '../../../button/button';
 import { getMapCoords } from '../../../helpers/helperFunctions';
 import ChurchCard from '../card/churchCard';
-import { actionSetChurch } from '../../../../store/currentChurch/actionCreator';
+import * as formActions from '../../../../store/form/actionCreator';
+import { useState } from 'react';
 
 const ChurchList = ({ setMapZoomLevel, setMarkerPos }) => {
 	const dispatch = useDispatch();
 	const churches = useSelector(selectChurch);
+	const [currentChurch, setCurrentChurch] = useState(churches[0]);
 
 	const onCardClick = (id) => {
-		const currentChurch = churches.find((el) => el.id === id);
+		setCurrentChurch(churches.find((el) => el.id === id));
+
+		dispatch(formActions.actionSetChurch(currentChurch));
+		dispatch(formActions.actionIsUpdating());
+		dispatch(formActions.actionShowForm());
+
+		if (!currentChurch.link) return;
 		setMapZoomLevel(16);
 		setMarkerPos(getMapCoords(currentChurch.link));
-		dispatch(actionSetChurch(currentChurch));
 	};
 	return (
 		<section className={styles['church-list']}>
@@ -31,11 +38,19 @@ const ChurchList = ({ setMapZoomLevel, setMarkerPos }) => {
 							key={church.id}
 							name={church.name}
 							onClick={() => onCardClick(church.id)}
+							activeCard={currentChurch.id === church.id}
 						/>
 					);
 				})}
 			</ul>
-			<Button>Dodaj</Button>
+			<Button
+				onClick={() => {
+					dispatch(formActions.actionResetChurch());
+					dispatch(formActions.actionShowForm());
+					dispatch(formActions.actionIsCreating());
+				}}>
+				Dodaj
+			</Button>
 		</section>
 	);
 };

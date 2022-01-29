@@ -10,3 +10,4 @@ export const fetchUser = async (token) =>
 
 export const fetchUserCreate = async (user) =>
 	await axios.post(`${process.env.REACT_APP_ENDPOINT_URL}/user`, user);
+

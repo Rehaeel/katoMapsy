@@ -14,6 +14,9 @@ const Input = (props) => {
 			variant='outlined'
 			error={props.error}
 			color={props.error ? 'error' : 'success'}
+			InputLabelProps={{ shrink: props.shrink ?? false }}
+			onFocus={props.setShrink}
+			onBlur={props.setUnShrink}
 		/>
 	);
 };

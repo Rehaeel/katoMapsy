@@ -9,7 +9,7 @@ export const churchReducer = (state = initialUserState, action) => {
 			return [...state, action.payload];
 
 		case actions.CHURCH_UPDATE:
-			return [...state].map((church) => {
+			return state.map((church) => {
 				if (church.id !== action.payload.id) return church;
 				else return action.payload;
 			});
