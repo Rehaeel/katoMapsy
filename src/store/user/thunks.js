@@ -18,10 +18,10 @@ export const thunkLoginUser = (user) => async (dispatch, _) => {
 
 export const thunkFetchUser = (token) => async (dispatch, _) => {
 	const response = await fetchUser(token);
-	const name = response.data;
+	const [name, email] = response.data;
 
-	dispatch(actionSetUser(name));
-	return name;
+	dispatch(actionSetUser(name, email));
+	return { name, email };
 };
 
 export const thunkCreateUser = (user) => async (dispatch, _) => {

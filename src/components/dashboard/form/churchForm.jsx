@@ -2,16 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './churchForm.module.css';
 import { v4 as uuid } from 'uuid';
 
+import { useDispatch } from 'react-redux';
+import { actionChurchUpdate } from '../../../store/church/actionCreator';
+import { actionHideForm } from '../../../store/form/actionCreator';
+import { thunkChurchAdd } from '../../../store/church/thunks';
+
 import Input from '../../input/input';
 import { useSelector } from 'react-redux';
 import { selectForm } from '../../../store/selectors';
 import Button from '../../button/button';
-import { useDispatch } from 'react-redux';
-import {
-	actionChurchAdd,
-	actionChurchUpdate,
-} from '../../../store/church/actionCreator';
-import { actionHideForm } from '../../../store/form/actionCreator';
 
 const ChurchForm = () => {
 	const dispatch = useDispatch();
@@ -71,9 +70,10 @@ const ChurchForm = () => {
 		};
 
 		if (!isUpdating) church.id = uuid();
+		dispatch(thunkChurchAdd(church));
 
 		if (isUpdating) dispatch(actionChurchUpdate(church));
-		else return dispatch(actionChurchAdd(church));
+		else return dispatch(thunkChurchAdd(church));
 
 		dispatch(actionHideForm());
 	};

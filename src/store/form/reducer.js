@@ -10,6 +10,7 @@ const initialFormState = {
 	},
 	showForm: false,
 	isUpdating: false,
+	zoom: 7,
 };
 
 export const formReducer = (state = initialFormState, action) => {
@@ -35,6 +36,11 @@ export const formReducer = (state = initialFormState, action) => {
 
 		case actions.FORM_IS_CREATING:
 			return { ...state, isUpdating: false };
+
+		// ZOOM
+
+		case actions.ZOOM_SET:
+			return { ...state, zoom: action.payload };
 
 		default:
 			return state;

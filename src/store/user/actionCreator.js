@@ -4,9 +4,9 @@ export const actionLoginUser = () => ({
 	type: actions.USER_LOGIN,
 });
 
-export const actionSetUser = (name) => ({
+export const actionSetUser = (name, email) => ({
 	type: actions.USER_FETCH,
-	payload: name,
+	payload: { name, email },
 });
 
 export const actionLogoutUser = () => ({

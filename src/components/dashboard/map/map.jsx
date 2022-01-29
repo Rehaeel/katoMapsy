@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { useSelector } from 'react-redux';
-import { selectChurch } from '../../../store/selectors';
+import { selectChurch, selectForm } from '../../../store/selectors';
 import { getMapCoords } from '../../helpers/helperFunctions';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { Icon, L } from 'leaflet';
 
 const myPin = new Icon({
@@ -21,14 +21,21 @@ const Map = ({ center, zoom }) => {
 	return null;
 };
 
-const MapDisplay = ({ position, mapZoomLevel }) => {
+const MapDisplay = () => {
 	const churches = useSelector(selectChurch);
 	const [renderCurPos, setRenderCurPos] = useState();
-	const [currPos, setCurrPos] = useState([]);
+	const [userCurrPos, setUserCurrPos] = useState([]);
+	const { currentChurch, zoom } = useSelector(selectForm);
+	const [mapPosition, setMapPosition] = useState([51.919437, 19.145136]);
+
+	useEffect(() => {
+		if (currentChurch.link !== '')
+			setMapPosition(getMapCoords(currentChurch.link));
+	}, [currentChurch]);
 
 	useEffect(() => {
 		const success = (pos) =>
-			setCurrPos([pos.coords.latitude, pos.coords.longitude]);
+			setUserCurrPos([pos.coords.latitude, pos.coords.longitude]);
 
 		const error = (err) => {
 			console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -43,22 +50,22 @@ const MapDisplay = ({ position, mapZoomLevel }) => {
 	}, []);
 
 	useEffect(() => {
-		if (currPos.length > 0)
+		if (userCurrPos.length > 0)
 			setRenderCurPos(
-				<Marker position={currPos} icon={myPin}>
-					Jesteś tutaj
+				<Marker position={userCurrPos} icon={myPin}>
+					<Popup>Jesteś tutaj</Popup>
 				</Marker>
 			);
-	}, [currPos]);
+	}, [userCurrPos]);
 
 	return (
 		<div style={{ height: '100%', width: '100%' }}>
-			<MapContainer center={position} zoom={mapZoomLevel}>
+			<MapContainer center={mapPosition} zoom={zoom}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
 				/>
-				<Map center={position} zoom={mapZoomLevel} />
+				<Map center={mapPosition} zoom={zoom} />
 				{churches.map((church) => {
 					if (!church.link) return;
 					return (

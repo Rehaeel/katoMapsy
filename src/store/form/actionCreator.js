@@ -1,8 +1,13 @@
 import * as actions from './actionTypes';
 
-export const actionSetChurch = (church) => ({
+export const actionSetCurrChurch = (church) => ({
 	type: actions.CHURCH_SET,
 	payload: church,
+});
+
+export const actionSetZoom = (zoom) => ({
+	type: actions.ZOOM_SET,
+	payload: zoom,
 });
 
 export const actionResetChurch = () => ({

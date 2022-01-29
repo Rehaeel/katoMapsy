@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import sha256 from 'sha256';
@@ -14,6 +14,9 @@ const Login = () => {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const [wrongInput, setWrongInput] = useState();
+
+	const [emailShrink, setEmailShrink] = useState(false);
+	const [passwordShrink, setPasswordShrink] = useState(false);
 
 	const onSubmitHanddler = (e) => {
 		e.preventDefault();
@@ -52,6 +55,11 @@ const Login = () => {
 					thisRef={emailRef}
 					error={wrongInput}
 					required={true}
+					shrink={emailShrink}
+					setUnShrink={() =>
+						emailRef.current.value !== '' || setEmailShrink(false)
+					}
+					setShrink={() => setEmailShrink(true)}
 				/>
 				<Input
 					labelText='hasło'
@@ -60,6 +68,12 @@ const Login = () => {
 					thisRef={passwordRef}
 					error={wrongInput}
 					required={true}
+					shrink={passwordShrink}
+					setUnShrink={() =>
+						passwordRef.current.value !== '' ||
+						setPasswordShrink(false)
+					}
+					setShrink={() => setPasswordShrink(true)}
 				/>
 
 				<Button type='submit'>Wskakuj !</Button>

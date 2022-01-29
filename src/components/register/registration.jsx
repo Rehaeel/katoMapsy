@@ -19,6 +19,10 @@ const Registration = () => {
 	const nameRef = useRef();
 	const passwordRef = useRef();
 
+	const [nameShrink, setNameShrink] = useState(false);
+	const [emailShrink, setEmailShrink] = useState(false);
+	const [passwordShrink, setPasswordShrink] = useState(false);
+
 	const onSubmitHanddler = (e) => {
 		e.preventDefault();
 		const user = {
@@ -51,6 +55,11 @@ const Registration = () => {
 					thisRef={nameRef}
 					required={true}
 					error={wrongEmail}
+					shrink={nameShrink}
+					setUnShrink={() =>
+						nameRef.current.value !== '' || setNameShrink(false)
+					}
+					setShrink={() => setNameShrink(true)}
 				/>
 				<Input
 					labelText='email'
@@ -58,6 +67,11 @@ const Registration = () => {
 					thisRef={emailRef}
 					required={true}
 					error={wrongEmail}
+					shrink={emailShrink}
+					setUnShrink={() =>
+						emailRef.current.value !== '' || setEmailShrink(false)
+					}
+					setShrink={() => setEmailShrink(true)}
 				/>
 				<Input
 					labelText='hasło'
@@ -66,6 +80,12 @@ const Registration = () => {
 					thisRef={passwordRef}
 					required={true}
 					error={wrongEmail}
+					shrink={passwordShrink}
+					setUnShrink={() =>
+						emailRef.current.value !== '' ||
+						setPasswordShrink(false)
+					}
+					setShrink={() => setPasswordShrink(true)}
 				/>
 
 				<Button type='submit'>Wskakuj !</Button>

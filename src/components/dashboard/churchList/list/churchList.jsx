@@ -4,31 +4,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectChurch } from '../../../../store/selectors';
 
 import Button from '../../../button/button';
-import { getMapCoords } from '../../../helpers/helperFunctions';
 import ChurchCard from '../card/churchCard';
 import * as formActions from '../../../../store/form/actionCreator';
-import { useState } from 'react';
 
-const ChurchList = ({ setMapZoomLevel, setMarkerPos }) => {
+const ChurchList = () => {
 	const dispatch = useDispatch();
 	const churches = useSelector(selectChurch);
-	const [currentChurch, setCurrentChurch] = useState(churches[0]);
 
 	const onCardClick = (id) => {
-		setCurrentChurch(churches.find((el) => el.id === id));
-
-		dispatch(formActions.actionSetChurch(currentChurch));
+		dispatch(
+			formActions.actionSetCurrChurch(churches.find((el) => el.id === id))
+		);
 		dispatch(formActions.actionIsUpdating());
 		dispatch(formActions.actionShowForm());
 
-		if (!currentChurch.link) return;
-		setMapZoomLevel(16);
-		setMarkerPos(getMapCoords(currentChurch.link));
+		dispatch(formActions.actionSetZoom(16));
 	};
 	return (
 		<section className={styles['church-list']}>
 			<h1>
-				Lista dodanych kościołów
+				Kościoły dodane przez Ciebie
 				{churches.length > 0 && <span>: {churches.length}</span>}
 			</h1>
 			<ul className={styles.list}>
@@ -38,7 +33,6 @@ const ChurchList = ({ setMapZoomLevel, setMarkerPos }) => {
 							key={church.id}
 							name={church.name}
 							onClick={() => onCardClick(church.id)}
-							activeCard={currentChurch.id === church.id}
 						/>
 					);
 				})}
