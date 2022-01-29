@@ -75,14 +75,14 @@ app.get('/user/:token', (req, res, next) => {
 	const { token } = req.params;
 
 	mapsy.query(
-		`SELECT name FROM users WHERE token='${token}'`,
+		`SELECT name, email FROM users WHERE token='${token}'`,
 		(_, result) => {
 			if (result.length === 0) {
 				res.status(404).json('nie ma takiego użytkownika');
 				return next();
 			}
 
-			res.send(result[0].name);
+			res.send([result[0].name, result[0].email]);
 		}
 	);
 });
