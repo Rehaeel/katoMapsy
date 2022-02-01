@@ -1,9 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectChurch, selectForm } from '../../../store/selectors';
-import { getMapCoords } from '../../helpers/helperFunctions';
+import { getMapCoords, getPlaceName } from '../../helpers/helperFunctions';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import { Icon, L } from 'leaflet';
+import L, { Icon } from 'leaflet';
+import { actionsetCurrMapPos } from '../../../store/form/actionCreator';
+import 'leaflet-fullscreen/dist/Leaflet.fullscreen.js';
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
+import styles from './map.module.css';
+import { fetchMapCity } from '../../../store/services';
 
 const myPin = new Icon({
 	iconUrl: '/myPosPin.png',
@@ -12,25 +17,17 @@ const myPin = new Icon({
 	shadowAnchor: [15, 20],
 });
 
-const Map = ({ center, zoom }) => {
-	const map = useMap();
-	map.flyTo(center, zoom, {
-		animate: true,
-		duration: 0.8,
-	});
-	return null;
-};
-
 const MapDisplay = () => {
+	const dispatch = useDispatch();
 	const churches = useSelector(selectChurch);
-	const [renderCurPos, setRenderCurPos] = useState();
 	const [userCurrPos, setUserCurrPos] = useState([]);
-	const { currentChurch, zoom } = useSelector(selectForm);
-	const [mapPosition, setMapPosition] = useState([51.919437, 19.145136]);
+	const { currentChurch, zoom, mapPosition } = useSelector(selectForm);
+
+	const [map, setMap] = useState();
 
 	useEffect(() => {
 		if (currentChurch.link !== '')
-			setMapPosition(getMapCoords(currentChurch.link));
+			dispatch(actionsetCurrMapPos(getMapCoords(currentChurch.link)));
 	}, [currentChurch]);
 
 	useEffect(() => {
@@ -50,33 +47,43 @@ const MapDisplay = () => {
 	}, []);
 
 	useEffect(() => {
-		if (userCurrPos.length > 0)
-			setRenderCurPos(
-				<Marker position={userCurrPos} icon={myPin}>
-					<Popup>Jesteś tutaj</Popup>
-				</Marker>
-			);
-	}, [userCurrPos]);
-
+		const options = {
+			animate: true,
+			duration: 0.8,
+		};
+		if (map) map.flyTo(mapPosition, zoom, options);
+	}, [mapPosition, map]);
+	
 	return (
-		<div style={{ height: '100%', width: '100%' }}>
-			<MapContainer center={mapPosition} zoom={zoom}>
+		<div className={styles.map} style={{ height: '100%', width: '100%' }}>
+			<MapContainer
+				center={mapPosition}
+				zoom={zoom}
+				whenCreated={setMap}
+				fullscreenControl={true}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
 				/>
-				<Map center={mapPosition} zoom={zoom} />
+				{userCurrPos.length > 0 && map && (
+					<Marker position={userCurrPos} icon={myPin}>
+						<Popup>Jesteś tutaj</Popup>
+					</Marker>
+				)}
 				{churches.map((church) => {
 					if (!church.link) return;
 					return (
 						<Marker
 							key={church.id}
-							position={getMapCoords(church.link)}>
-							<Popup>some simple html</Popup>
+							position={getMapCoords(church.link)}
+							riseOnHover={true}>
+							<Popup>
+								{church.name}
+								{church.adress}
+							</Popup>
 						</Marker>
 					);
 				})}
-				{renderCurPos}
 			</MapContainer>
 		</div>
 	);

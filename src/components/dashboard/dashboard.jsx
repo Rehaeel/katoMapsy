@@ -8,6 +8,7 @@ import ChurchList from './churchList/list/churchList';
 import ChurchForm from './form/churchForm';
 import MapDisplay from './map/map';
 import SpinningWheel from '../helpers/spinningWheel';
+import HoursAdder from './form/hoursAdder/hoursAdder';
 
 const Dashboard = () => {
 	const user = useSelector(select.selectUser);
@@ -15,9 +16,12 @@ const Dashboard = () => {
 
 	return user.isAuth ? (
 		<section className={styles.dashboard}>
-			<ChurchList showForm={setShowForm} />
-			<section className={styles.details}>
+			<section className={styles.form}>
+				<ChurchList showForm={setShowForm} />
 				<ChurchForm showForm={showForm} />
+			</section>
+			<section className={styles['map-and-hours']}>
+				<HoursAdder />
 				<MapDisplay />
 			</section>
 		</section>

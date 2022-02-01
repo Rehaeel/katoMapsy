@@ -1,14 +1,17 @@
 .church-list {
 	box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
 	border-radius: 12px;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding: var(--gap);
 	padding-top: 0;
+	opacity: 1;
+	transition: all 0.8s ease;
 }
 
-.church-list > h1:first-child {
+.church-list > h2:first-child {
 	border-bottom: 1px solid var(--cl-main);
 	width: 80%;
 	text-align: center;
@@ -18,10 +21,14 @@
 }
 
 .list {
-	width: 100%;
+	width: 95%;
 	height: 100%;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	justify-content: start;
 	gap: var(--gap);
+}
+
+.hide-list {
+	opacity: 0;
 }

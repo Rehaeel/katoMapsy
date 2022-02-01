@@ -1,23 +1,52 @@
 .form {
-	position: relative;
-	height: auto;
+	position: absolute;
+	top: 0;
+	left: calc(-100% - (var(--gap) * 2));
+	background-color: #fff;
+	box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
 	width: 100%;
-	z-index: 0;
-}
-
-.form > div {
-	z-index: 1 !important;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: var(--gap);
 	transition: all 0.8s ease;
+	overflow-y: auto;
 }
 
-.form > div > h1 {
+.form > h2 {
 	text-align: center;
 	width: 100%;
+	margin-bottom: calc(var(--gap) * 1.5);
 }
 
-.form > div > form {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+.form > form {
+	display: flex;
+	flex-direction: column;
 	gap: var(--gap);
+	width: 90%;
+	height: 100%;
 	margin: var(--gap);
+}
+
+.form > img {
+	position: absolute;
+	top: var(--gap);
+	right: var(--gap);
+	cursor: pointer;
+}
+
+.split-on-two {
+	display: inline-flex;
+	gap: var(--gap);
+}
+
+.show-form {
+	left: 0;
+}
+
+.hours-list-header {
+	text-align: center;
+	margin-top: var(--gap);
 }

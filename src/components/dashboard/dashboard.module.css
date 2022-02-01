@@ -6,15 +6,16 @@
 	width: 100%;
 	padding: calc(var(--gap) * 1.5);
 	gap: calc(var(--gap) * 2);
-	/* overflow: hidden; */
 }
 
-.details {
+.map-and-hours {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 }
 
-.show-form {
-	margin-top: 0 !important;
+.form {
+	position: relative;
+	width: 100%;
+	height: 100%;
 }

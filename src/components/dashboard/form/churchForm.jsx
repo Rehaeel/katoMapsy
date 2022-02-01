@@ -8,15 +8,20 @@ import { actionHideForm } from '../../../store/form/actionCreator';
 import { thunkChurchAdd } from '../../../store/church/thunks';
 
 import Input from '../../input/input';
+import close from '../../icons/close.svg';
 import { useSelector } from 'react-redux';
 import { selectForm } from '../../../store/selectors';
 import Button from '../../button/button';
+import { getMapCoords, getPlaceName } from '../../helpers/helperFunctions';
+import { fetchMapCity } from '../../../store/services';
+
+import HoursAdder from './hoursAdder/hoursAdder';
+import HoursList from './hoursList/hoursList';
 
 const ChurchForm = () => {
 	const dispatch = useDispatch();
-	const { showForm } = useSelector(selectForm);
-	const { currentChurch } = useSelector(selectForm);
-	const { isUpdating } = useSelector(selectForm);
+	const { currentChurch, isFormUpdating, showForm, currentHoursList } =
+		useSelector(selectForm);
 
 	const hasProperty = (prop) => currentChurch[prop] !== '';
 
@@ -41,19 +46,48 @@ const ChurchForm = () => {
 		setGoogleShrink(hasProperty('link'));
 	}, [currentChurch.link]);
 
-	useEffect(() => {
-		nameRef.current.value = currentChurch.name;
-		cityRef.current.value = currentChurch.city;
-		adressRef.current.value = currentChurch.adress;
-		websiteRef.current.value = currentChurch.website;
-		googleRef.current.value = currentChurch.link;
-	}, [currentChurch]);
-
 	const nameRef = useRef();
 	const cityRef = useRef();
 	const adressRef = useRef();
 	const websiteRef = useRef();
 	const googleRef = useRef();
+
+	const [gotLink, setGotLink] = useState(false);
+
+	useEffect(() => {
+		googleRef.current.value = currentChurch.link;
+		const isLinkPresent =
+			googleRef.current.value !== '' &&
+			googleRef.current.value !== undefined;
+
+		if (isLinkPresent) setGotLink(true);
+		else setGotLink(false);
+
+		(async () => {
+			if (isLinkPresent)
+				return await fetchMapCity(
+					getMapCoords(currentChurch.link)
+				).then((res) => (cityRef.current.value = res));
+			else cityRef.current.value = currentChurch.city;
+		})();
+		nameRef.current.value = isLinkPresent
+			? getPlaceName(currentChurch.link)
+			: currentChurch.name;
+		adressRef.current.value = currentChurch.adress;
+		websiteRef.current.value = currentChurch.website;
+	}, [currentChurch]);
+
+	const onLinkChangeHandler = (e) => {
+		const linkValue = e.target.value;
+		setGotLink(true);
+		setNameShrink(true);
+		setCityShrink(true);
+
+		fetchMapCity(getMapCoords(linkValue)).then((res) => {
+			cityRef.current.value = res;
+		});
+		nameRef.current.value = getPlaceName(linkValue);
+	};
 
 	const onSubmitForm = (e) => {
 		e.preventDefault();
@@ -67,34 +101,84 @@ const ChurchForm = () => {
 			adress: adressRef.current.value,
 			website: websiteRef.current.value,
 			link: googleRef.current.value,
+			// hours: hoursRef.current.state.selectValue.map((val) => val.value),
 		};
 
-		if (!isUpdating) church.id = uuid();
-		dispatch(thunkChurchAdd(church));
+		console.log(church);
 
-		if (isUpdating) dispatch(actionChurchUpdate(church));
-		else return dispatch(thunkChurchAdd(church));
+		// if (!isFormUpdating) church.id = uuid();
+		// dispatch(thunkChurchAdd(church));
 
-		dispatch(actionHideForm());
+		// if (isFormUpdating) dispatch(actionChurchUpdate(church));
+		// else return dispatch(thunkChurchAdd(church));
+
+		// dispatch(actionHideForm());
 	};
 
 	return (
-		<div className={styles.form}>
-			<div style={{ marginTop: showForm ? '0' : '-100%' }}>
-				<h1>Formularz</h1>
-				<form>
-					<Input
-						labelText='Nazwa'
-						required={true}
-						helperText='Pełna nazwa parafii'
-						placeholder='nazwa parafii'
-						thisRef={nameRef}
-						shrink={nameShrink}
-						setUnShrink={() =>
-							nameRef.current.value !== '' || setNameShrink(false)
-						}
-						setShrink={() => setNameShrink(true)}
-					/>
+		<div
+			className={`${styles.form} ${showForm ? styles['show-form'] : ''}`}>
+			<img
+				src={close}
+				alt='close form'
+				onClick={() => dispatch(actionHideForm())}
+			/>
+			<h2>Formularz</h2>
+			<form>
+				<Input
+					labelText='Pinezka'
+					required={true}
+					helperText={
+						<span>
+							Link do pinezki map{' '}
+							{hasProperty('link') ? (
+								<a
+									href={googleRef.current.value}
+									alt='mapy google'
+									target='_blank'>
+									Google
+								</a>
+							) : (
+								'Google'
+							)}
+						</span>
+					}
+					placeholder='Google Maps'
+					thisRef={googleRef}
+					shrink={googleShrink}
+					setUnShrink={() =>
+						googleRef.current.value !== '' || setGoogleShrink(false)
+					}
+					setShrink={() => setGoogleShrink(true)}
+					onChange={onLinkChangeHandler}
+				/>
+				<Input
+					labelText='Nazwa'
+					required={true}
+					helperText='Pełna nazwa parafii'
+					placeholder='nazwa parafii'
+					thisRef={nameRef}
+					shrink={nameShrink}
+					setUnShrink={() =>
+						nameRef.current.value !== '' || setNameShrink(false)
+					}
+					setShrink={() => setNameShrink(true)}
+					disabled={gotLink}
+				/>
+
+				<Input
+					labelText='Adress'
+					required={true}
+					helperText='Pełen adress wraz numerem lokalu'
+					placeholder='adress'
+					thisRef={adressRef}
+					shrink={adressShrink}
+					setUnShrink={() =>
+						adressRef.current.value !== '' || setAdressShrink(false)
+					}
+					setShrink={() => setAdressShrink(true)}
+				/>
+				<div className={styles['split-on-two']}>
 					<Input
 						labelText='Miasto'
 						required={true}
@@ -106,19 +190,7 @@ const ChurchForm = () => {
 							cityRef.current.value !== '' || setCityShrink(false)
 						}
 						setShrink={() => setCityShrink(true)}
-					/>
-					<Input
-						labelText='Adress'
-						required={true}
-						helperText='Pełen adress wraz numerem lokalu'
-						placeholder='adress'
-						thisRef={adressRef}
-						shrink={adressShrink}
-						setUnShrink={() =>
-							adressRef.current.value !== '' ||
-							setAdressShrink(false)
-						}
-						setShrink={() => setAdressShrink(true)}
+						disabled={gotLink}
 					/>
 					<Input
 						labelText='Strona parafii'
@@ -147,38 +219,19 @@ const ChurchForm = () => {
 						}
 						setShrink={() => setWebsiteShrink(true)}
 					/>
-					<Input
-						labelText='Pinezka'
-						required={true}
-						helperText={
-							<span>
-								Link do pinezki map{' '}
-								{hasProperty('link') ? (
-									<a
-										href={googleRef.current.value}
-										alt='mapy google'
-										target='_blank'>
-										Google
-									</a>
-								) : (
-									'Google'
-								)}
-							</span>
-						}
-						placeholder='Google Maps'
-						thisRef={googleRef}
-						shrink={googleShrink}
-						setUnShrink={() =>
-							googleRef.current.value !== '' ||
-							setGoogleShrink(false)
-						}
-						setShrink={() => setGoogleShrink(true)}
-					/>
-					<Button type='submit' onClick={onSubmitForm}>
-						{isUpdating ? 'Aktualizuj' : 'Dodaj'}
-					</Button>
-				</form>
-			</div>
+				</div>
+				{isFormUpdating && currentChurch.hours.length > 0 && (
+					<>
+						<h3 className={styles['hours-list-header']}>
+							godziny otwarcia
+						</h3>
+						<HoursList />
+					</>
+				)}
+				<Button type='submit' onClick={onSubmitForm}>
+					{isFormUpdating ? 'Aktualizuj' : 'Dodaj'}
+				</Button>
+			</form>
 		</div>
 	);
 };

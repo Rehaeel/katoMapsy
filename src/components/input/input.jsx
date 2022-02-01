@@ -17,6 +17,7 @@ const Input = (props) => {
 			InputLabelProps={{ shrink: props.shrink ?? false }}
 			onFocus={props.setShrink}
 			onBlur={props.setUnShrink}
+			disabled={props.disabled}
 		/>
 	);
 };

@@ -10,6 +10,7 @@ import Login from './components/login/login';
 import Registration from './components/register/registration';
 import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
+import { actionHideForm } from './store/form/actionCreator';
 
 function App() {
 	const dispatch = useDispatch();
@@ -23,6 +24,10 @@ function App() {
 			window.location.pathname !== '/register'
 		)
 			navigate('/login');
+
+		document.addEventListener('keydown', (e) => {
+			if (e.code === 'Escape') dispatch(actionHideForm());
+		});
 	}, []);
 
 	console.log(store.getState());

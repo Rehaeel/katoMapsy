@@ -1,0 +1,81 @@
+.date-adder {
+	position: relative;
+	height: auto;
+	width: 100%;
+	z-index: 1;
+}
+
+.date-adder {
+	z-index: 1;
+	display: grid;
+	grid-template-columns: 1fr 1fr auto;
+	justify-content: center;
+	align-items: center;
+	gap: calc(var(--gap) * 1.5);
+	margin: var(--gap);
+	transition: all 0.8s ease;
+}
+
+.header > h2,
+.week-days,
+.holy-sunday {
+	text-align: center;
+}
+
+.header {
+	width: 100%;
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+}
+
+.header > img {
+	cursor: pointer;
+}
+
+.week-days,
+.holy-sunday {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap);
+	align-self: baseline;
+}
+
+.week-days {
+	grid-column: 1 / 1;
+}
+
+.holy-sunday {
+	grid-column: 2 / 2;
+}
+
+.checkbox {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	height: 100%;
+}
+
+.checkbox > label {
+	height: 2em;
+}
+
+.checkbox > div:first-of-type {
+	justify-self: baseline;
+}
+
+.checkbox > div:last-child {
+	position: absolute;
+	bottom: calc(0px - var(--gap));
+	right: 0;
+	transform: translateY(100%);
+	z-index: 1;
+	transition: all 0.8s ease;
+	display: flex;
+	flex-direction: column;
+}
+
+.selection {
+	color: rgb(163, 163, 163);
+	font-style: italic;
+}
