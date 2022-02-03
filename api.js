@@ -22,7 +22,7 @@ app.post('/user', async (req, res, next) => {
 
 	let shouldContinue = true;
 
-	new Promise((success, error) => {
+	new Promise((success, _) => {
 		mapsy.query(
 			`SELECT token FROM users WHERE email='${email}'`,
 			(_, response) => {
@@ -89,19 +89,27 @@ app.get('/user/:token', (req, res, next) => {
 
 /////////// MAPS
 
-app.get('/church/all', (_, res) => {
-	mapsy.query(`SELECT * FROM churches`, (err, result) => {
-		if (err) console.error(err);
-
-		res.send(result);
-	});
-});
-
-app.get('/church/:id', (req, res) => {
-	const churchId = req.params.id;
+app.post('/church', (req, res) => {
+	const { id, name, city, adress, link, contributor, website, hours } =
+		req.body;
 
 	mapsy.query(
-		`SELECT * FROM churches WHERE id='${churchId}'`,
+		`INSERT INTO churches (id, name, city, adress, link, contributor, website, hours) VALUES ('${id}', '${name}', '${city}', '${adress}', '${link}', '${contributor}', '${website}', '${JSON.stringify(
+			hours
+		)}')`,
+		(err, result) => {
+			if (err) console.error(err);
+
+			res.send(result);
+		}
+	);
+});
+
+app.get('/church', (req, res) => {
+	const { email } = req.headers;
+
+	mapsy.query(
+		`SELECT * FROM churches WHERE contributor='${email}'`,
 		(err, result) => {
 			if (err) console.error(err);
 
