@@ -89,20 +89,35 @@ app.get('/user/:token', (req, res, next) => {
 
 /////////// MAPS
 
-app.post('/church', (req, res) => {
+app.post('/church', (req, res, next) => {
 	const { id, name, city, adress, link, contributor, website, hours } =
 		req.body;
 
-	mapsy.query(
-		`INSERT INTO churches (id, name, city, adress, link, contributor, website, hours) VALUES ('${id}', '${name}', '${city}', '${adress}', '${link}', '${contributor}', '${website}', '${JSON.stringify(
-			hours
-		)}')`,
-		(err, result) => {
-			if (err) console.error(err);
+	let shouldContinue = true;
 
-			res.send(result);
-		}
-	);
+	new Promise((success, _) => {
+		mapsy.query(
+			`SELECT * FROM churches WHERE name='${name}' AND city='${city}' AND adress='${adress}'`,
+			(_, response) => {
+				if (response.length === 0) return success();
+
+				shouldContinue = false;
+				res.status(400).json('kościół jest już w bazie');
+				next();
+				return success('kościół już jest w bazie');
+			}
+		);
+	}).then((isTaken) => {
+		if (isTaken) return;
+		mapsy.query(
+			`INSERT INTO churches (id, name, city, adress, link, contributor, website, hours) VALUES ('${id}', '${name}', '${city}', '${adress}', '${link}', '${contributor}', '${website}', '${JSON.stringify(
+				hours
+			)}')`,
+			(_, result) => {
+				if (shouldContinue) res.send(result);
+			}
+		);
+	});
 });
 
 app.get('/church', (req, res) => {
