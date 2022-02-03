@@ -1,10 +1,12 @@
-import { churchesMock } from '../../churchesMock';
 import * as actions from './actionTypes';
 
-const initialUserState = churchesMock || [];
+const initialUserState = [];
 
 export const churchReducer = (state = initialUserState, action) => {
 	switch (action.type) {
+		case actions.CHURCH_LIST_SET:
+			return action.payload;
+
 		case actions.CHURCH_ADD:
 			return [...state, action.payload];
 

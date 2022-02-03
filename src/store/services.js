@@ -17,3 +17,21 @@ export const fetchMapCity = async (coords) =>
 			`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords[0]}&lon=${coords[1]}`
 		)
 		.then((res) => res.data.address.county);
+
+export const fetchMapAdress = async (coords) =>
+	await axios
+		.get(
+			`https://eu1.locationiq.com/v1/reverse.php?key=pk.31b9536799e300f1a43445ef6d2935e1&lat=${coords[0]}&lon=${coords[1]}&format=json`
+		)
+		.then((res) => ({
+			road: res.data.address.road,
+			number: res.data.address.house_number,
+		}));
+
+export const fetchChurchIntoDB = async (church) =>
+	await axios.post(`${process.env.REACT_APP_ENDPOINT_URL}/church`, church);
+
+export const fetchAllUserChurches = async (email) =>
+	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/church`, {
+		headers: { email: email },
+	});

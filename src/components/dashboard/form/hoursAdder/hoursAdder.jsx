@@ -1,30 +1,35 @@
-import { useEffect, useRef, useState } from 'react';
-import { DateRange } from 'react-date-range';
+import { useEffect, useState } from 'react';
 import styles from './hoursAdder.module.css';
-import { pl as plLang } from 'react-date-range/src/locale/index';
 import { selectOptions } from '../../../../constants';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { selectForm } from '../../../../store/selectors';
+import * as formActions from '../../../../store/form/actionCreator';
+
+import { DateRange } from 'react-date-range';
+import { pl as plLang } from 'react-date-range/src/locale/index';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import Select from 'react-select';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectForm } from '../../../../store/selectors';
+import makeAnimated from 'react-select/animated';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import Button from '../../../button/button';
-import {
-	actionAddCurrentHours,
-	actionResetCurrentHours,
-	actionUpdateHours,
-} from '../../../../store/form/actionCreator';
-import { v4 as uuid } from 'uuid';
 import close from '../../../icons/close.svg';
 
-const HoursAdder = () => {
+import { v4 as uuid } from 'uuid';
+import {
+	customSelectTheme,
+	rangeAdderAlertMessage,
+	sortHours,
+} from '../../../helpers/helperFunctions';
+
+const HoursAdder = (props) => {
 	const dispatch = useDispatch();
 	const { showForm, currentRange, isRangeUpdating, currentHoursList } =
 		useSelector(selectForm);
 
-	const [weekValue, setWeekValue] = useState();
-	const [sundayValue, setSundayValue] = useState();
+	const [weekValue, setWeekValue] = useState(null);
+	const [sundayValue, setSundayValue] = useState(null);
 
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [isFullYear, setIsFullYear] = useState(true);
@@ -40,20 +45,22 @@ const HoursAdder = () => {
 	const [selection, setSelection] = useState(initialSelection);
 
 	const init = () => {
+		setWeekValue(null);
+		setSundayValue(null);
 		setSelection(initialSelection);
 		setIsFullYear(true);
-		setSundayValue();
-		setWeekValue();
 		setShowDatePicker(false);
-		dispatch(actionResetCurrentHours());
+		dispatch(formActions.actionSetRangeIsNotUpdating());
+		dispatch(formActions.actionResetCurrentRange());
 	};
 
 	useEffect(() => {
 		if (
 			currentRange.holySundays[0] === '' &&
 			currentRange.weekdays[0] === ''
-		)
+		) {
 			return init();
+		}
 
 		setSundayValue(
 			currentRange.holySundays.map((hour) => ({
@@ -99,13 +106,17 @@ const HoursAdder = () => {
 			.map((num) => num.padStart(2, '0'))
 			.join('.');
 
+	const rangeExists = (dateRange) =>
+		Boolean(
+			!isRangeUpdating &&
+				currentHoursList.find(
+					(el) => el.interval === dateRange.interval
+				)
+		);
+
 	const onSubmitHandler = () => {
-		const alertStartingMsg = 'Dodaj godziny w polu: ';
-		let alertMessage = [];
-		if (sundayValue.value === null) alertMessage.push('niedziele i święta');
-		if (weekValue.value === null) alertMessage.push('dni powszednie');
-		if (alertMessage.length > 0)
-			return alert(`${alertStartingMsg}${alertMessage}`);
+		const alertMessage = rangeAdderAlertMessage(sundayValue, weekValue);
+		if (alertMessage !== undefined) return alert(alertMessage);
 
 		const dateRange = {
 			id: isRangeUpdating ? currentRange.id : uuid(),
@@ -114,13 +125,21 @@ const HoursAdder = () => {
 				`${convertIntervalIntoDDMM(
 					selection[0].startDate
 				)}-${convertIntervalIntoDDMM(selection[0].endDate)}`,
-			holySundays: sundayValue.map((el) => el.value),
-			weekdays: weekValue.map((el) => el.value),
+			holySundays: sortHours(sundayValue.map((el) => el.value)),
+			weekdays: sortHours(weekValue.map((el) => el.value)),
 		};
-		console.log(dateRange);
 
-		if (isRangeUpdating) dispatch(actionUpdateHours(dateRange));
-		else if (!isRangeUpdating) dispatch(actionAddCurrentHours(dateRange));
+		if (currentHoursList[0].id === '') {
+			dispatch(formActions.actionSetCurrentHoursList([dateRange]));
+		} else {
+			if (rangeExists(dateRange))
+				return alert(`Taki okres już istnieje! Wybierz inny`);
+
+			if (isRangeUpdating)
+				dispatch(formActions.actionUpdateHoursInList(dateRange));
+			else if (!isRangeUpdating)
+				dispatch(formActions.actionAddToHoursList(dateRange));
+		}
 
 		init();
 	};
@@ -134,9 +153,14 @@ const HoursAdder = () => {
 					<img
 						src={close}
 						alt='wyjdź z edycji godzin'
-						onClick={() => init()}
+						onClick={init}
 					/>
-					<h2>Dodaj godziny</h2>
+					<h2>
+						Dodaj godziny{' '}
+						<span className={`grayed-out ${styles.shortcut}`}>
+							[alt + H]
+						</span>
+					</h2>
 					<Button onClick={onSubmitHandler}>
 						{isRangeUpdating
 							? 'aktualizuj godziny'
@@ -147,19 +171,32 @@ const HoursAdder = () => {
 				<div className={styles['week-days']}>
 					<h3>dni powszednie</h3>
 					<Select
+						components={makeAnimated()}
 						options={selectOptions}
-						isMulti={true}
+						isMulti
 						value={weekValue}
 						onChange={setWeekValue}
+						placeholder='zaznacz godziny'
+						theme={customSelectTheme}
+						closeMenuOnSelect={false}
+						isClearable={true}
+						ref={props.weekSelectRef}
+						tabSelectsValue={false}
 					/>
 				</div>
 				<div className={styles['holy-sunday']}>
 					<h3>niedziele i święta</h3>
 					<Select
+						components={makeAnimated()}
 						options={selectOptions}
-						isMulti={true}
+						isMulti
 						value={sundayValue}
 						onChange={setSundayValue}
+						placeholder='zaznacz godziny'
+						theme={customSelectTheme}
+						closeMenuOnSelect={false}
+						isClearable
+						tabSelectsValue={false}
 					/>
 				</div>
 

@@ -6,6 +6,7 @@
 	width: 100%;
 	padding: calc(var(--gap) * 1.5);
 	gap: calc(var(--gap) * 2);
+	background-color: var(--cl-background);
 }
 
 .map-and-hours {

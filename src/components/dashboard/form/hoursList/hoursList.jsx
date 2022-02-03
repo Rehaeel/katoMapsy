@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './hoursList.module.css';
 import edit from '../../../icons/pen.svg';
 
-import {
-	actionSetCurrentHours,
-	actionSetRangeIsUpdating,
-} from '../../../../store/form/actionCreator';
+import * as formActions from '../../../../store/form/actionCreator';
 import { selectForm } from '../../../../store/selectors';
 import { useEffect, useState } from 'react';
 
@@ -17,11 +14,8 @@ const HoursList = () => {
 	const [hoursList, setHoursList] = useState(currentChurch.hours);
 
 	useEffect(() => {
-		// console.log(currentChurch.hours);
-		dispatch(actionSetCurrentHours(currentChurch.hours));
-		// console.log(currentHoursList);
-		// console.log(hoursList);
-	}, [currentChurch]);
+		setHoursList(currentHoursList);
+	}, [currentHoursList]);
 
 	const convertWholeYear = (interval) => {
 		if (typeof interval === 'string') {
@@ -52,8 +46,8 @@ const HoursList = () => {
 		});
 
 	const editHoursHandler = (hours) => {
-		dispatch(actionSetRangeIsUpdating());
-		dispatch(actionSetCurrentHours(hours));
+		dispatch(formActions.actionSetRangeIsUpdating());
+		dispatch(formActions.actionSetCurrentRange(hours));
 	};
 
 	return (
@@ -66,15 +60,21 @@ const HoursList = () => {
 						<div className={styles.range}>
 							{convertWholeYear(range.interval)}
 						</div>
-						<ul className={styles['holy-sundays']}>
-							{printOutHours(
-								range.holySundays,
-								'niedziele i święta: '
-							)}
-						</ul>
-						<ul className={styles.weekdays}>
-							{printOutHours(range.weekdays, 'dni powszednie: ')}
-						</ul>
+
+						<div>
+							<ul className={styles.weekdays}>
+								{printOutHours(
+									range.weekdays,
+									'dni powszednie: '
+								)}
+							</ul>
+							<ul className={styles['holy-sundays']}>
+								{printOutHours(
+									range.holySundays,
+									'niedziele i święta: '
+								)}
+							</ul>
+						</div>
 						<div
 							className={styles['edit-container']}
 							onClick={() => editHoursHandler(range)}>

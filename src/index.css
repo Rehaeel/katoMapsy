@@ -1,9 +1,19 @@
 :root {
-	--cl-dark: #3d550c;
-	--cl-main: #59981a;
-	--cl-light: #81b622;
+	--cl-dark: hsl(80, 75%, 19%);
+	--cl-main: hsl(var(--cl-main-h), var(--cl-main-s), var(--cl-main-l));
+	--cl-light: hsl(81, 69%, 42%);
 	--yellow: #ecf87f;
 	--red: #f44c29;
+
+	--cl-main-h: 90;
+	--cl-main-s: 71%;
+	--cl-main-l: 35%;
+
+	--cl-background: #fff;
+	--cl-background-dark: #333;
+	--cl-background-light: #555;
+
+	--cl-grayed: rgb(134, 134, 134);
 
 	--gap: 15px;
 	--nav-height: 60px;
@@ -58,5 +68,5 @@ img {
 }
 
 .grayed-out {
-	color: rgb(134, 134, 134);
+	color: var(--cl-grayed);
 }

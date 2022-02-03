@@ -29,7 +29,13 @@
 	border-image-source: linear-gradient(
 		170deg,
 		var(--cl-main) 0,
-		rgba(61, 85, 12, 0) 30%
+		hsla(
+				calc(var(--cl-main-h) - 10),
+				calc(var(--cl-main-s) - 4%),
+				calc(var(--cl-main-l) - 16%),
+				0
+			)
+			30%
 	);
 }
 
@@ -41,14 +47,19 @@
 	border-image-source: linear-gradient(
 		-8deg,
 		var(--cl-main) 0,
-		rgba(61, 85, 12, 0) 30%
+		hsla(
+				calc(var(--cl-main-h) - 10),
+				calc(var(--cl-main-s) - 4%),
+				calc(var(--cl-main-l) - 16%),
+				0
+			)
+			30%
 	);
 }
 
 .range-container {
 	display: grid;
 	grid-template-columns: 100px 1fr auto;
-	grid-template-rows: 1fr 1fr;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: var(--gap);
@@ -85,20 +96,9 @@
 	justify-content: center;
 	align-items: center;
 	gap: calc(var(--gap) / 2);
-	grid-row: 1 / -1;
 }
 
 .holy-sundays,
 .weekdays {
 	line-height: 1.3em;
-}
-
-.holy-sundays {
-	grid-column: 2 / 2;
-	align-self: end;
-}
-
-.weekdays {
-	grid-column: 2 / 2;
-	align-self: start;
 }

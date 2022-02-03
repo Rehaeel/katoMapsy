@@ -6,11 +6,25 @@ import { selectChurch, selectForm } from '../../../../store/selectors';
 import Button from '../../../button/button';
 import ChurchCard from '../card/churchCard';
 import * as formActions from '../../../../store/form/actionCreator';
+import SearchBar from './searchBar/searchBar';
+import { useEffect, useRef, useState } from 'react';
 
-const ChurchList = () => {
+import enter from '../../../icons/enter.svg';
+
+const ChurchList = (props) => {
 	const dispatch = useDispatch();
 	const churches = useSelector(selectChurch);
-	const { showForm, currentHoursList } = useSelector(selectForm);
+	const { showForm } = useSelector(selectForm);
+
+	const [searchValue, setSearchValue] = useState('');
+	const churchListRef = useRef();
+
+	const [citiesList, setCitiesList] = useState([]);
+	useEffect(() => {
+		const list = new Set();
+		churches.forEach((church) => list.add(church.city));
+		setCitiesList([...list]);
+	}, [churches]);
 
 	const onCardClick = (id) => {
 		const currentChurch = churches.find((el) => el.id === id);
@@ -21,39 +35,88 @@ const ChurchList = () => {
 		dispatch(formActions.actionShowUpdateForm());
 		dispatch(formActions.actionShowForm());
 		dispatch(formActions.actionSetRangeIsNotUpdating());
-		dispatch(formActions.actionResetCurrentHours());
+		dispatch(formActions.actionResetCurrentRange());
 
 		dispatch(formActions.actionSetZoom(16));
 	};
+
 	return (
 		<section
 			className={`${styles['church-list']} ${
 				showForm ? styles['hide-list'] : ''
 			}`}>
-			<h2>
-				Kościoły dodane przez Ciebie
-				{churches.length > 0 && <span>: {churches.length}</span>}
-			</h2>
-			<ul className={styles.list}>
-				{churches.map((church) => {
-					return (
-						<ChurchCard
-							key={church.id}
-							name={church.name}
-							onClick={() => onCardClick(church.id)}
-						/>
-					);
-				})}
-			</ul>
+			<SearchBar
+				searchValue={searchValue}
+				setSearchValue={setSearchValue}
+				searchRef={props.searchRef}
+				listRef={churchListRef.current}
+			/>
+			<div className={styles.list} ref={churchListRef}>
+				{churches.length === 0 ? (
+					<h4>brak dodanych kościołów</h4>
+				) : (
+					citiesList.map((city) => (
+						<ul
+							key={city}
+							style={{
+								display: `${
+									churches
+										.filter((church) => {
+											if (searchValue === '') return true;
+
+											return church.name
+												.toLowerCase()
+												.includes(
+													searchValue.toLowerCase()
+												);
+										})
+										.filter(
+											(church) => church.city === city
+										).length > 0
+										? ''
+										: 'none'
+								}`,
+							}}>
+							<h3>{city}</h3>
+							{churches
+								.filter((church) => {
+									if (searchValue === '') return true;
+
+									return church.name
+										.toLowerCase()
+										.includes(searchValue.toLowerCase());
+								})
+								.filter((church) => church.city === city)
+								.map((church) => {
+									return (
+										<ChurchCard
+											key={church.id}
+											name={church.name}
+											onClick={() =>
+												onCardClick(church.id)
+											}
+										/>
+									);
+								})}
+						</ul>
+					))
+				)}
+			</div>
 			<Button
 				onClick={() => {
 					dispatch(formActions.actionResetChurch());
 					dispatch(formActions.actionShowForm());
 					dispatch(formActions.actionShowCreateForm());
 					dispatch(formActions.actionSetRangeIsNotUpdating());
-					dispatch(formActions.actionResetCurrentHours());
+					dispatch(formActions.actionResetCurrentRange());
 				}}>
-				Dodaj
+				Dodaj&nbsp;&nbsp; [
+				<img
+					src={enter}
+					alt='enter fires add button'
+					className={styles.enter}
+				/>
+				]
 			</Button>
 		</section>
 	);

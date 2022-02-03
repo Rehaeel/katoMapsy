@@ -18,6 +18,7 @@ const Input = (props) => {
 			onFocus={props.setShrink}
 			onBlur={props.setUnShrink}
 			disabled={props.disabled}
+			onChange={props.onChange}
 		/>
 	);
 };

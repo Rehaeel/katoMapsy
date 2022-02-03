@@ -34,14 +34,8 @@ export const churchesMock = [
 			{
 				id: '123',
 				interval: '31.01-02.12',
-				holySundays: ['7:00', '8:30', '10:00', '11:30', '18:00'],
+				holySundays: ['7:00', '11:30', '18:00'],
 				weekdays: ['7:00', '18:00'],
-			},
-			{
-				id: '234',
-				interval: true,
-				holySundays: ['7:00', '10:00'],
-				weekdays: ['18:00'],
 			},
 		],
 	},

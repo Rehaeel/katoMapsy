@@ -12,16 +12,20 @@ import close from '../../icons/close.svg';
 import { useSelector } from 'react-redux';
 import { selectForm } from '../../../store/selectors';
 import Button from '../../button/button';
-import { getMapCoords, getPlaceName } from '../../helpers/helperFunctions';
-import { fetchMapCity } from '../../../store/services';
+import {
+	churchFormAlertMessage,
+	getMapCoords,
+	getPlaceName,
+} from '../../helpers/helperFunctions';
+import { fetchMapAdress, fetchMapCity } from '../../../store/services';
 
-import HoursAdder from './hoursAdder/hoursAdder';
 import HoursList from './hoursList/hoursList';
 
 const ChurchForm = () => {
 	const dispatch = useDispatch();
 	const { currentChurch, isFormUpdating, showForm, currentHoursList } =
 		useSelector(selectForm);
+	const [gotLink, setGotLink] = useState(false);
 
 	const hasProperty = (prop) => currentChurch[prop] !== '';
 
@@ -52,7 +56,10 @@ const ChurchForm = () => {
 	const websiteRef = useRef();
 	const googleRef = useRef();
 
-	const [gotLink, setGotLink] = useState(false);
+	useEffect(() => {
+		if (showForm && googleRef.current !== undefined)
+			googleRef.current.focus();
+	}, [showForm, googleRef]);
 
 	useEffect(() => {
 		googleRef.current.value = currentChurch.link;
@@ -79,14 +86,23 @@ const ChurchForm = () => {
 
 	const onLinkChangeHandler = (e) => {
 		const linkValue = e.target.value;
+		const mapCoords = getMapCoords(linkValue);
+		if (mapCoords === 'ERROR') return;
+
 		setGotLink(true);
 		setNameShrink(true);
 		setCityShrink(true);
 
-		fetchMapCity(getMapCoords(linkValue)).then((res) => {
+		fetchMapCity(mapCoords).then((res) => {
 			cityRef.current.value = res;
 		});
 		nameRef.current.value = getPlaceName(linkValue);
+		fetchMapAdress(mapCoords).then((res) => {
+			if (adressRef.current !== undefined) {
+				adressRef.current.value = `${res.road} ${res.number}`;
+				setAdressShrink(true);
+			}
+		});
 	};
 
 	const onSubmitForm = (e) => {
@@ -101,18 +117,27 @@ const ChurchForm = () => {
 			adress: adressRef.current.value,
 			website: websiteRef.current.value,
 			link: googleRef.current.value,
-			// hours: hoursRef.current.state.selectValue.map((val) => val.value),
+			hours: currentHoursList,
 		};
 
-		console.log(church);
+		const alertMessage = churchFormAlertMessage(church);
+		if (alertMessage !== undefined) return alert(alertMessage);
 
-		// if (!isFormUpdating) church.id = uuid();
-		// dispatch(thunkChurchAdd(church));
+		if (!isFormUpdating) {
+			church.id = uuid();
+			dispatch(thunkChurchAdd(church));
+		}
+		if (isFormUpdating) {
+			dispatch(actionChurchUpdate(church));
+		}
 
-		// if (isFormUpdating) dispatch(actionChurchUpdate(church));
-		// else return dispatch(thunkChurchAdd(church));
-
-		// dispatch(actionHideForm());
+		nameRef.current.value = '';
+		cityRef.current.value = '';
+		adressRef.current.value = '';
+		websiteRef.current.value = '';
+		googleRef.current.value = '';
+		setGotLink(false);
+		dispatch(actionHideForm());
 	};
 
 	return (
@@ -177,6 +202,7 @@ const ChurchForm = () => {
 						adressRef.current.value !== '' || setAdressShrink(false)
 					}
 					setShrink={() => setAdressShrink(true)}
+					disabled={gotLink}
 				/>
 				<div className={styles['split-on-two']}>
 					<Input
@@ -220,10 +246,11 @@ const ChurchForm = () => {
 						setShrink={() => setWebsiteShrink(true)}
 					/>
 				</div>
-				{isFormUpdating && currentChurch.hours.length > 0 && (
+
+				{currentHoursList[0].id !== '' && (
 					<>
 						<h3 className={styles['hours-list-header']}>
-							godziny otwarcia
+							Msze Święte
 						</h3>
 						<HoursList />
 					</>

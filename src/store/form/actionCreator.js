@@ -36,23 +36,23 @@ export const actionSetCurrentHoursList = (hours) => ({
 	payload: hours,
 });
 
-export const actionAddCurrentHours = (hours) => ({
-	type: actions.FORM_ADD_HOURS,
+export const actionAddToHoursList = (hours) => ({
+	type: actions.FORM_ADD_TO_HOURS_LIST,
 	payload: hours,
 });
 
-export const actionSetCurrentHours = (hours) => ({
-	type: actions.FORM_SET_HOURS,
+export const actionSetCurrentRange = (hours) => ({
+	type: actions.FORM_SET_CURRENT_RANGE,
 	payload: hours,
 });
 
-export const actionUpdateHours = (range) => ({
-	type: actions.FORM_UPDATE_HOURS,
+export const actionUpdateHoursInList = (range) => ({
+	type: actions.FORM_UPDATE_HOURS_LIST,
 	payload: range,
 });
 
-export const actionResetCurrentHours = () => ({
-	type: actions.FORM_RESET_HOURS,
+export const actionResetCurrentRange = () => ({
+	type: actions.FORM_RESET_CURRENT_RANGE,
 });
 
 export const actionSetRangeIsUpdating = () => ({

@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectChurch, selectForm } from '../../../store/selectors';
-import { getMapCoords, getPlaceName } from '../../helpers/helperFunctions';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import L, { Icon } from 'leaflet';
+import { getMapCoords } from '../../helpers/helperFunctions';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Icon } from 'leaflet';
 import { actionsetCurrMapPos } from '../../../store/form/actionCreator';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen.js';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import styles from './map.module.css';
-import { fetchMapCity } from '../../../store/services';
 
 const myPin = new Icon({
 	iconUrl: '/myPosPin.png',
@@ -53,7 +52,7 @@ const MapDisplay = () => {
 		};
 		if (map) map.flyTo(mapPosition, zoom, options);
 	}, [mapPosition, map]);
-	
+
 	return (
 		<div className={styles.map} style={{ height: '100%', width: '100%' }}>
 			<MapContainer

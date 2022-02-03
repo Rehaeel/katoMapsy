@@ -12,8 +12,9 @@
 	justify-content: center;
 	align-items: center;
 	gap: calc(var(--gap) * 1.5);
-	margin: var(--gap);
+	margin-bottom: var(--gap);
 	transition: all 0.8s ease;
+	width: 100%;
 }
 
 .header > h2,
@@ -43,10 +44,12 @@
 
 .week-days {
 	grid-column: 1 / 1;
+	z-index: 2;
 }
 
 .holy-sunday {
 	grid-column: 2 / 2;
+	z-index: 2;
 }
 
 .checkbox {
@@ -73,9 +76,16 @@
 	transition: all 0.8s ease;
 	display: flex;
 	flex-direction: column;
+	border-radius: 0 0 0 var(--border-radius);
+	box-shadow: -3px 5px 10px rgb(0 0 0 / 20%);
+	overflow: hidden;
 }
 
 .selection {
-	color: rgb(163, 163, 163);
+	color: var(--cl-grayed);
 	font-style: italic;
+}
+
+.shortcut {
+	font-size: 0.8em;
 }
