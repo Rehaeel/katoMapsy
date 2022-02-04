@@ -152,6 +152,19 @@ app.post('/church/:id', (req, res) => {
 	);
 });
 
+// get all churches
+app.get('/churches/all', (req, res) => {
+	mapsy.query(
+		`
+	SELECT link FROM churches`,
+		(err, result) => {
+			if (err) res.statusCode(400);
+
+			res.send(result);
+		}
+	);
+});
+
 app.listen(process.env.PORT, () => {
 	console.log(`Server running on port: ${process.env.PORT}`);
 });
