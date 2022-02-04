@@ -87,8 +87,9 @@ app.get('/user/:token', (req, res, next) => {
 	);
 });
 
-/////////// MAPS
+/////////// Churches
 
+// add
 app.post('/church', (req, res, next) => {
 	const { id, name, city, adress, link, contributor, website, hours } =
 		req.body;
@@ -120,6 +121,7 @@ app.post('/church', (req, res, next) => {
 	});
 });
 
+// get chruches created by user
 app.get('/church', (req, res) => {
 	const { email } = req.headers;
 
@@ -127,6 +129,23 @@ app.get('/church', (req, res) => {
 		`SELECT * FROM churches WHERE contributor='${email}'`,
 		(err, result) => {
 			if (err) console.error(err);
+
+			res.send(result);
+		}
+	);
+});
+
+// update church
+app.post('/church/:id', (req, res) => {
+	const { id } = req.params;
+	const { name, city, adress, link, contributor, website, hours } = req.body;
+
+	mapsy.query(
+		`UPDATE churches SET name='${name}', city='${city}', adress='${adress}', link='${link}', contributor='${contributor}', website='${website}', hours='${JSON.stringify(
+			hours
+		)}' WHERE id='${id}'`,
+		(err, result) => {
+			if (err) res.statusCode(400).json('bad request');
 
 			res.send(result);
 		}
