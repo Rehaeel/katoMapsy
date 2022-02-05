@@ -34,6 +34,8 @@ const HoursList = () => {
 	const deleteHoursHandler = (rangeId) =>
 		dispatch(formActions.actionDeleteHourInList(rangeId));
 
+	console.log(hoursList);
+
 	return (
 		<ul className={styles['hours-list']}>
 			{hoursList.map((range) => (

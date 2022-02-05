@@ -186,14 +186,15 @@ const ChurchForm = () => {
 					/>
 				</div>
 
-				{currentHoursList[0].id !== '' && (
-					<>
-						<h3 className={styles['hours-list-header']}>
-							Msze Święte
-						</h3>
-						<HoursList />
-					</>
-				)}
+				{currentHoursList[0] !== undefined &&
+					currentHoursList[0].id !== '' && (
+						<>
+							<h3 className={styles['hours-list-header']}>
+								Msze Święte
+							</h3>
+							<HoursList />
+						</>
+					)}
 				<Button type='submit' onClick={onSubmitForm}>
 					{isFormUpdating ? 'Aktualizuj' : 'Dodaj'}
 				</Button>
