@@ -40,7 +40,7 @@ const MapDisplay = () => {
 	hooks.useFetchChurches();
 	hooks.useFetchAllDBChurches(map);
 	hooks.useCurrMapPosition();
-	hooks.useSetCurrentUserPosition(map, zoom, mapPosition);
+	// hooks.useSetCurrentUserPosition(map, zoom, mapPosition);
 	hooks.useFlyTo(map, mapPosition, zoom);
 
 	return (

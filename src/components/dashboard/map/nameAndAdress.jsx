@@ -2,7 +2,9 @@ const NameAndAdress = (props) => {
 	return (
 		<div className={props.styles['adress-and-name']}>
 			<p>{props.church.name},</p>
-			<p>ul. {props.church.adress}</p>
+			<p>
+				ul. {props.church.adress}, {props.church.city}
+			</p>
 		</div>
 	);
 };

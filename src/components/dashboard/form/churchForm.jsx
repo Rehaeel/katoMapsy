@@ -31,23 +31,23 @@ const ChurchForm = () => {
 	const [nameShrink, setNameShrink] = useState(hasProperty('name'));
 	useEffect(() => {
 		setNameShrink(hasProperty('name'));
-	}, [currentChurch.name, hasProperty]);
+	}, [currentChurch.name]);
 	const [cityShrink, setCityShrink] = useState(hasProperty('city'));
 	useEffect(() => {
 		setCityShrink(hasProperty('city'));
-	}, [currentChurch.city, hasProperty]);
+	}, [currentChurch.city]);
 	const [adressShrink, setAdressShrink] = useState(hasProperty('adress'));
 	useEffect(() => {
 		setAdressShrink(hasProperty('adress'));
-	}, [currentChurch.adress, hasProperty]);
+	}, [currentChurch.adress]);
 	const [websiteShrink, setWebsiteShrink] = useState(hasProperty('website'));
 	useEffect(() => {
 		setWebsiteShrink(hasProperty('website'));
-	}, [currentChurch.website, hasProperty]);
+	}, [currentChurch.website]);
 	const [googleShrink, setGoogleShrink] = useState(hasProperty('link'));
 	useEffect(() => {
 		setGoogleShrink(hasProperty('link'));
-	}, [currentChurch.link, hasProperty]);
+	}, [currentChurch.link]);
 
 	const nameRef = useRef();
 	const cityRef = useRef();

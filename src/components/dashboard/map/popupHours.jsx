@@ -1,59 +1,71 @@
 import { useEffect, useState } from 'react';
 
 const PopupHours = (props) => {
-	const [currentHours, setCurrentHours] = useState(props.hours[0].interval);
+	// let currentRange;
 
-	const intervalsArr = props.hours.map((range) => range.interval);
+	// const intervalsArr = props.hours.map((range) => range.interval);
 
-	useEffect(() => {
-		let thisDay = new Date().getDate().toString().padStart(2, '0');
-		let thisMonth = (new Date().getMonth() + 1).toString().padStart(2, '0');
+	// let thisDay = new Date().getDate().toString().padStart(2, '0');
+	// let thisMonth = (new Date().getMonth() + 1).toString().padStart(2, '0');
 
-		const wholeYear = Boolean(intervalsArr.find((int) => int === true));
-		if (wholeYear) {
-			setCurrentHours('01.01-31.12');
+	// const wholeYear = intervalsArr.find((int) => int.toString() === 'true');
+
+	// if (wholeYear)
+	// 	currentRange = props.hours.find((range) => range.interval === true);
+	// else {
+	// 	currentRange = props.hours.find((hours) => {
+	// 		const [intStart, intEnd] = hours.interval.split('-');
+	// 		const [intStartD, intStartM] = intStart.split('.');
+	// 		const [intEndD, intEndM] = intEnd.split('.');
+
+	// 		if (thisMonth >= intStartM && thisMonth <= intEndM)
+	// 			if (thisDay >= intStartD && thisDay <= intEndD) return true;
+	// 	});
+	// }
+
+	// let weekdaysHours, holySundaysHours;
+
+	// if (currentRange !== undefined) {
+	// 	weekdaysHours = currentRange.weekdays.reduce((acc, curr, i) => {
+	// 		if (i === 0) return acc + curr;
+	// 		else return `${acc}, ${curr}`;
+	// 	}, '');
+
+	// 	holySundaysHours = currentRange.holySundays.reduce((acc, curr, i) => {
+	// 		if (i === 0) return acc + curr;
+	// 		else return `${acc}, ${curr}`;
+	// 	}, '');
+	// }
+
+	const hoursReducer = (hoursList) =>
+		hoursList.reduce((acc, curr, i) => {
+			if (i === 0) return acc + curr;
+			else return `${acc}, ${curr}`;
+		}, '');
+
+	return props.hours.map((range) => {
+		if (range.interval === true) {
+			return (
+				<div key={range.interval} className={props.styles.hours}>
+					<p>interwał: cały rok</p>
+					<p>w tygodniu: {hoursReducer(range.weekdays)}</p>
+					<p>
+						w niedziele i święta: {hoursReducer(range.holySundays)}
+					</p>
+				</div>
+			);
 		} else {
-			setCurrentHours(
-				props.hours.find((hours) => {
-					const [intStart, intEnd] = hours.interval.split('-');
-					const [intStartD, intStartM] = intStart.split('.');
-					const [intEndD, intEndM] = intEnd.split('.');
-
-					if (thisMonth >= intStartM && thisMonth <= intEndM)
-						if (thisDay >= intStartD && thisDay <= intEndD)
-							return true;
-				})
+			return (
+				<div key={range.interval} className={props.styles.hours}>
+					<p>interwał: {range.interval}</p>
+					<p>w tygodniu: {hoursReducer(range.weekdays)}</p>
+					<p>
+						w niedziele i święta: {hoursReducer(range.holySundays)}
+					</p>
+				</div>
 			);
 		}
-	}, []);
-
-	const [weekdaysHours, setWeekdaysHours] = useState();
-	const [holySundaysHours, setHolySundayHours] = useState();
-
-	useEffect(() => {
-		if (currentHours.weekdays !== undefined) {
-			setWeekdaysHours(
-				currentHours.weekdays.reduce((acc, curr, i) => {
-					if (i === 0) return acc + curr;
-					else return `${acc}, ${curr}`;
-				}, '')
-			);
-			setHolySundayHours(
-				currentHours.holySundays.reduce((acc, curr, i) => {
-					if (i === 0) return acc + curr;
-					else return `${acc}, ${curr}`;
-				}, '')
-			);
-		}
-	}, [currentHours]);
-
-	return (
-		<div className={props.styles.hours}>
-			<i>teraz: </i>
-			<p>w tygodniu: {weekdaysHours}</p>
-			<p>w niedziele i święta: {holySundaysHours}</p>
-		</div>
-	);
+	});
 };
 
 export default PopupHours;
