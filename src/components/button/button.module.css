@@ -3,9 +3,8 @@
 	background-color: var(--cl-main);
 	border: 1px solid var(--cl-dark);
 	color: #fff;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	border-radius: var(--border-radius);
-	box-shadow: 5px 5px 10px rgba(89, 152, 26, 0.5);
 	border-top: 1.5px solid var(--cl-light);
 	border-left: 1.5px solid var(--cl-light);
 	cursor: pointer;

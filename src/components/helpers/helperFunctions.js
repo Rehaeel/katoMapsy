@@ -5,12 +5,16 @@ export const getMapCoords = (link) => {
 	return [lat, long];
 };
 
+/////////////////////////////////////////////////////////////////////
+
 export const getPlaceName = (link) => {
 	const part1 = link.slice(link.indexOf('place/') + 6);
 	const placeName = part1.slice(0, part1.indexOf('/'));
 	const result = decodeURI(placeName).replaceAll('+', ' ');
 	return result;
 };
+
+/////////////////////////////////////////////////////////////////////
 
 export const sortHours = (list) =>
 	list.sort((a, b) => {
@@ -25,16 +29,43 @@ export const sortHours = (list) =>
 		}
 	});
 
+/////////////////////////////////////////////////////////////////////
+
 export const customSelectTheme = (theme) => ({
 	...theme,
 	colors: {
 		...theme.colors,
-		primary25: 'rgba(89, 152, 26, 0.3)',
+		primary25:
+			'hsla(var(--cl-light-h), var(--cl-light-s), var(--cl-light-l), 0.3)',
 		primary: 'var(--cl-main)',
 		primary50: 'var(--cl-light)',
-		neutral10: 'rgba(89, 152, 26, 0.2)',
+		neutral10:
+			'hsla(var(--cl-light-h), var(--cl-light-s), var(--cl-light-l), 0.4)',
+		neutral0: 'var(--cl-background-light)',
+		neutral30: 'var(--cl-light)',
+		neutral50:
+			'rgba(var(--cl-font-r), var(--cl-font-g), var(--cl-font-b),0.6)',
+		neutral60: 'var(--cl-light)',
+		neutral80: 'var(--cl-font)',
 	},
 });
+
+/////////////////////////////////////////////////////////////////////
+
+export const customInputMuiTheme = (theme) => ({
+	textField: {
+		width: '90%',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		paddingBottom: 0,
+		marginTop: 0,
+		fontWeight: 500,
+	},
+	input: {
+		color: 'white',
+	},
+});
+/////////////////////////////////////////////////////////////////////
 
 export const churchFormAlertMessage = (church) => {
 	let alertMessage = [];
@@ -53,6 +84,8 @@ export const churchFormAlertMessage = (church) => {
 	if (alertMessage.length > 0) return message;
 };
 
+/////////////////////////////////////////////////////////////////////
+
 export const rangeAdderAlertMessage = (sundayValue, weekValue) => {
 	let alertMessage = [];
 	if (sundayValue === null) alertMessage.push('niedziele i święta');
@@ -70,4 +103,28 @@ export const rangeAdderAlertMessage = (sundayValue, weekValue) => {
 		else return `${acc}, ${msg}`;
 	}, 'Dodaj godziny w polu: ');
 	if (alertMessage.length > 0) return message;
+};
+
+/////////////////////////////////////////////////////////////////////
+
+export const convertWholeYear = (interval) => {
+	if (typeof interval === 'string') {
+		const listArr = interval.split('-').map((date, i) => {
+			if (i === 0)
+				return (
+					<p key={date}>
+						<span className='grayed-out'>od: </span>
+						{date}
+					</p>
+				);
+			else
+				return (
+					<p key={date}>
+						<span className='grayed-out'>do: </span>
+						{date}
+					</p>
+				);
+		});
+		return listArr;
+	} else return [<p key={interval.toString()}>cały rok</p>];
 };

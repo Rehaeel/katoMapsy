@@ -1,23 +1,29 @@
 import * as actions from './actionTypes';
 
-const initialUserState = [];
+const initialUserState = {
+	list: [],
+	isFetched: false,
+};
 
 export const churchReducer = (state = initialUserState, action) => {
 	switch (action.type) {
 		case actions.CHURCH_LIST_SET:
-			return action.payload;
+			return { ...state, list: action.payload, isFetched: true };
 
 		case actions.CHURCH_ADD:
-			return [...state, action.payload];
+			return {
+				...state,
+				list: [...state.list, action.payload],
+			};
 
 		case actions.CHURCH_UPDATE:
-			return state.map((church) => {
-				if (church.id !== action.payload.id) return church;
-				else return action.payload;
-			});
-
-		case actions.CHURCH_DELETE:
-			return [...state].filter((church) => church.id !== action.payload);
+			return {
+				...state,
+				list: state.list.map((church) => {
+					if (church.id !== action.payload.id) return church;
+					else return action.payload;
+				}),
+			};
 
 		default:
 			return state;

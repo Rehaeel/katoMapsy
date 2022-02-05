@@ -8,18 +8,27 @@ import ChurchForm from './form/churchForm';
 import MapDisplay from './map/map';
 import SpinningWheel from '../helpers/spinningWheel';
 import HoursAdder from './form/hoursAdder/hoursAdder';
+import { useEnterPressListener } from '../helpers/hooks';
 
 const Dashboard = (props) => {
 	const user = useSelector(select.selectUser);
 
+	useEnterPressListener(props.showForm, props.searchRef);
+
 	return user.isAuth ? (
 		<section className={styles.dashboard}>
 			<section className={styles.form}>
-				<ChurchList searchRef={props.searchRef} />
+				<ChurchList
+					churchlistRef={props.chruchlistRef}
+					searchRef={props.searchRef}
+				/>
 				<ChurchForm />
 			</section>
 			<section className={styles['map-and-hours']}>
-				<HoursAdder weekSelectRef={props.weekSelectRef} />
+				<HoursAdder
+					weekSelectRef={props.weekSelectRef}
+					sundaySelectRef={props.sundaySelectRef}
+				/>
 				<MapDisplay />
 			</section>
 		</section>

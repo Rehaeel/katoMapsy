@@ -1,0 +1,23 @@
+.input > div {
+	background-color: var(--cl-background-dark);
+	border: 1px solid var(--cl-background-light);
+}
+
+.input > label {
+	background-color: var(--cl-background-dark);
+	padding: 0 var(--gap);
+	color: var(--cl-grayed);
+}
+
+.input > div > input {
+	color: var(--cl-font);
+}
+
+.input > p:last-child {
+	color: var(--cl-font);
+	font-size: 0.8em;
+}
+
+.Mui-disabled {
+	-webkit-text-fill-color: #fff !important;
+}

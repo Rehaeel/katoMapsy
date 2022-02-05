@@ -1,14 +1,21 @@
 .church-list {
-	box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 8px 5px var(--cl-background-dark);
 	border-radius: 12px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: calc(var(--gap) * 2);
 	padding: var(--gap);
 	padding-top: 0;
-	opacity: 1;
-	transition: all 0.8s ease;
+	z-index: 5;
+	background-color: var(--cl-background);
+	background-image: linear-gradient(
+		var(--cl-background),
+		var(--cl-background-light)
+	);
+	transition: var(--transition);
+	overflow-y: auto;
 }
 
 .church-list > * {
@@ -20,36 +27,37 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column-reverse;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: center;
-	gap: calc(var(--gap) * 2.5);
+	gap: calc(var(--gap) * 2);
 }
 
 .list > ul {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: center;
 	gap: var(--gap);
 }
 
 .list > ul > h3 {
-	width: 50%;
+	width: fit-content;
 	border-bottom: 1px solid var(--cl-main);
 	padding: calc(var(--gap) / 2) var(--gap);
 	text-align: center;
+	font-size: 1.5em;
 }
 
 .list > ul > li {
 	width: 100%;
 }
 
-.hide-list {
-	opacity: 0;
-}
-
 .enter {
 	transform: translateY(5px);
 	max-width: 18px;
+}
+
+.church-list > *:last-child {
+	box-shadow: 0 0 10px var(--cl-background-dark);
 }

@@ -1,4 +1,5 @@
 import styles from './searchBar.module.css';
+import search from '../../../../icons/search.svg';
 
 const SearchBar = (props) => {
 	const submitHandler = (e) => {
@@ -11,10 +12,11 @@ const SearchBar = (props) => {
 		elRef[1].click();
 		props.setSearchValue('');
 	};
-	
+
 	return (
 		<div className={styles['seach-bar-container']}>
 			<form className={styles['search-bar']} onSubmit={submitHandler}>
+				<img src={search} alt='wyszukaj' />
 				<input
 					type='text'
 					value={props.searchValue}

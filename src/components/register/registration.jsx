@@ -32,10 +32,10 @@ const Registration = () => {
 		};
 		dispatch(thunkCreateUser(user))
 			.then(() => {
-				navigate('/');
 				emailRef.current.value = '';
 				passwordRef.current.value = '';
 				nameRef.current.value = '';
+				navigate('/');
 			})
 			.catch((err) => {
 				setWrongEmail(true);

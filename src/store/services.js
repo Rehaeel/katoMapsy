@@ -23,15 +23,23 @@ export const fetchMapAdress = async (coords) =>
 		.get(
 			`https://eu1.locationiq.com/v1/reverse.php?key=pk.31b9536799e300f1a43445ef6d2935e1&lat=${coords[0]}&lon=${coords[1]}&format=json`
 		)
-		.then((res) => ({
-			road: res.data.address.road,
-			number: res.data.address.house_number,
-		}));
+		.then((res) => res.data.address);
 
 export const fetchChurchIntoDB = async (church) =>
 	await axios.post(`${process.env.REACT_APP_ENDPOINT_URL}/church`, church);
+
+export const fetchChurchUpdate = async (church) =>
+	await axios
+		.post(
+			`${process.env.REACT_APP_ENDPOINT_URL}/church/${church.id}`,
+			church
+		)
+		.then((res) => res.data);
 
 export const fetchAllUserChurches = async (email) =>
 	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/church`, {
 		headers: { email: email },
 	});
+
+export const fetchAllChurches = async () =>
+	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/churches/all`);

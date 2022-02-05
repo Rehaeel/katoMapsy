@@ -8,11 +8,15 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectChurch } from '../../store/selectors';
 
+import logout from '../icons/log-out.svg';
+import Shortcuts from './shortcuts';
+import github from '../icons/code.svg';
+
 const Header = () => {
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const churches = useSelector(selectChurch);
+	const { list: churches } = useSelector(selectChurch);
 
 	const onLogoutHandler = () => {
 		dispatch(thunkLogoutUser());
@@ -21,17 +25,41 @@ const Header = () => {
 
 	return (
 		<nav className={styles.header}>
-			<img src={logo} alt='logo strony' />
+			<div>
+				<div className={styles.helpers}>
+					<div className={styles.github}>
+						<img
+							src={github}
+							alt='kod źródłowy'
+							onClick={() =>
+								window.open(
+									'https://github.com/Rehaeel/katoMapsy',
+									'_blank'
+								)
+							}
+						/>
+					</div>
+					<Shortcuts styles={styles} />
+				</div>
+				<img src={logo} alt='logo strony' />
+			</div>
 
 			{user.isAuth && (
 				<>
 					<h2>
-						kościoły dodane przez Ciebie
+						Kościoły dodane przez Ciebie
 						<span>: {churches.length}</span>
 					</h2>
 					<div className={styles.user}>
 						<h3>Hejooo {user.name}</h3>
-						<Button onClick={onLogoutHandler}>Wyloguj</Button>
+						<Button onClick={onLogoutHandler}>
+							Wyloguj{' '}
+							<img
+								src={logout}
+								alt='logout'
+								className={styles.logout}
+							/>
+						</Button>
 					</div>
 				</>
 			)}

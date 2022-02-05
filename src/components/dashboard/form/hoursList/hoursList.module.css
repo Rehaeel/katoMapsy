@@ -77,17 +77,18 @@
 	cursor: pointer;
 	transform: translateY(calc(0px - var(--gap))) translateX(var(--gap))
 		scale(1);
-	border: 1px solid rgba(0, 0, 0, 0.3);
+	border: 1px solid var(--cl-background-light);
+	background-color: var(--cl-background-dark);
 	border-radius: calc(var(--border-radius) / 3);
 	padding: 2px;
-	box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.15);
-	transition: all 0.2s ease;
+	box-shadow: -2px 2px 4px var(--cl-background-dark);
+	transition: all calc(var(--transition) / 4) ease;
 }
 
 .edit-container:hover {
 	transform: translateY(calc(0px - var(--gap))) translateX(var(--gap))
 		scale(1.3);
-	box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.15);
+	box-shadow: -4px 4px 4px var(--cl-background-dark);
 }
 
 .range {

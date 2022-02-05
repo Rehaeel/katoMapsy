@@ -14,8 +14,3 @@ export const actionChurchUpdate = (church) => ({
 	type: actions.CHURCH_UPDATE,
 	payload: church,
 });
-
-export const actionChurchDelete = (churchId) => ({
-	type: actions.CHURCH_DELETE,
-	payload: churchId,
-});

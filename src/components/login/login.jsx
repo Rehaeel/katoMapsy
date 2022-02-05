@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import sha256 from 'sha256';
@@ -41,6 +41,10 @@ const Login = () => {
 				if (err.response.status === 400) alert(err.response.data);
 			});
 	};
+
+	useEffect(() => {
+		emailRef.current.focus();
+	}, []);
 
 	return (
 		<>

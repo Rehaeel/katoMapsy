@@ -1,3 +1,18 @@
 .map {
 	z-index: 0;
 }
+
+.hours,
+.adress-and-name {
+	display: flex;
+	flex-direction: column;
+}
+
+.hours > p,
+.adress-and-name > p {
+	margin: 0;
+}
+
+.adress-and-name {
+	margin-bottom: var(--gap);
+}

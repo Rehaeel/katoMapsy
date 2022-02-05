@@ -13,7 +13,7 @@
 	align-items: center;
 	gap: calc(var(--gap) * 1.5);
 	margin-bottom: var(--gap);
-	transition: all 0.8s ease;
+	transition: var(--transition);
 	width: 100%;
 }
 
@@ -73,7 +73,7 @@
 	right: 0;
 	transform: translateY(100%);
 	z-index: 1;
-	transition: all 0.8s ease;
+	transition: var(--transition);
 	display: flex;
 	flex-direction: column;
 	border-radius: 0 0 0 var(--border-radius);

@@ -1,73 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-
-import { thunkFetchUser } from './store/user/thunks';
+import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 
 import FullWidthContainer from './components/helpers/fullWidthContainer';
 import Login from './components/login/login';
 import Registration from './components/register/registration';
 import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
-import { actionHideForm } from './store/form/actionCreator';
-import { selectUser } from './store/selectors';
-import { thunkFetchChurses } from './store/church/thunks';
-import * as formActions from './store/form/actionCreator';
+import { selectForm } from './store/selectors';
+import * as hooks from './components/helpers/hooks';
+import GoOnMobile from './components/dashboard/goOnMobile/goOnMobile';
 
 function App() {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const searchRef = useRef();
-	const { email } = useSelector(selectUser);
-
-	useEffect(() => {
-		if (email) dispatch(thunkFetchChurses());
-	}, [email]);
-
+	const sundaySelectRef = useRef();
 	const weekSelectRef = useRef();
+	const chruchlistRef = useRef();
 
-	const keyPressListener = (e) => {
-		if (e.code === 'Escape') {
-			dispatch(actionHideForm());
-			if (searchRef.current !== undefined) searchRef.current.blur();
-		}
-		if (e.code === 'Slash') {
-			e.preventDefault();
-			searchRef.current.focus();
-		}
-		if (
-			searchRef.current !== document.activeElement &&
-			e.code === 'Enter'
-		) {
-			e.preventDefault();
-			dispatch(formActions.actionResetChurch());
-			dispatch(formActions.actionShowForm());
-			dispatch(formActions.actionShowCreateForm());
-			dispatch(formActions.actionSetRangeIsNotUpdating());
-			dispatch(formActions.actionResetCurrentRange());
-		}
-		if (e.altKey && e.code === 'KeyH') weekSelectRef.current.focus();
-	};
+	const { showForm } = useSelector(selectForm);
 
-	useEffect(() => {
-		if (window.localStorage.getItem('token'))
-			dispatch(thunkFetchUser(window.localStorage.getItem('token')));
-		else if (
-			window.location.pathname !== '/login' &&
-			window.location.pathname !== '/register'
-		)
-			navigate('/login');
-		document.addEventListener('keydown', keyPressListener);
-	}, []);
+	const [screenSize, setScreenSize] = useState(window.innerWidth);
+	hooks.useScreenSizeListener(setScreenSize);
 
-	useEffect(() => {
-		if (searchRef.current !== undefined)
-			searchRef.current.addEventListener('keydown', (e) =>
-				e.stopPropagation()
-			);
-	}, [searchRef]);
+	hooks.useKeyPressListener(weekSelectRef, searchRef);
+	hooks.useSearchStopPropagation(searchRef);
 
-	return (
+	return screenSize < 1024 ? (
+		<GoOnMobile />
+	) : (
 		<>
 			<Header />
 			<FullWidthContainer isFullHeight={true}>
@@ -79,6 +39,9 @@ function App() {
 							<Dashboard
 								searchRef={searchRef}
 								weekSelectRef={weekSelectRef}
+								sundaySelectRef={sundaySelectRef}
+								chruchlistRef={chruchlistRef}
+								showForm={showForm}
 							/>
 						}
 					/>

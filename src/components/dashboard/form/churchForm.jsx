@@ -3,23 +3,23 @@ import styles from './churchForm.module.css';
 import { v4 as uuid } from 'uuid';
 
 import { useDispatch } from 'react-redux';
-import { actionChurchUpdate } from '../../../store/church/actionCreator';
 import { actionHideForm } from '../../../store/form/actionCreator';
-import { thunkChurchAdd } from '../../../store/church/thunks';
+import * as thunks from '../../../store/church/thunks';
 
 import Input from '../../input/input';
 import close from '../../icons/close.svg';
 import { useSelector } from 'react-redux';
 import { selectForm } from '../../../store/selectors';
 import Button from '../../button/button';
-import {
-	churchFormAlertMessage,
-	getMapCoords,
-	getPlaceName,
-} from '../../helpers/helperFunctions';
+import * as helperFunc from '../../helpers/helperFunctions';
 import { fetchMapAdress, fetchMapCity } from '../../../store/services';
 
 import HoursList from './hoursList/hoursList';
+import { GooglePin } from './inputs/pin';
+import { WebsiteInput } from './inputs/website';
+import { CityInput } from './inputs/city';
+import { AdreesInput } from './inputs/adress';
+import { NameInput } from './inputs/name';
 
 const ChurchForm = () => {
 	const dispatch = useDispatch();
@@ -73,12 +73,12 @@ const ChurchForm = () => {
 		(async () => {
 			if (isLinkPresent)
 				return await fetchMapCity(
-					getMapCoords(currentChurch.link)
+					helperFunc.getMapCoords(currentChurch.link)
 				).then((res) => (cityRef.current.value = res));
 			else cityRef.current.value = currentChurch.city;
 		})();
 		nameRef.current.value = isLinkPresent
-			? getPlaceName(currentChurch.link)
+			? helperFunc.getPlaceName(currentChurch.link)
 			: currentChurch.name;
 		adressRef.current.value = currentChurch.adress;
 		websiteRef.current.value = currentChurch.website;
@@ -86,7 +86,7 @@ const ChurchForm = () => {
 
 	const onLinkChangeHandler = (e) => {
 		const linkValue = e.target.value;
-		const mapCoords = getMapCoords(linkValue);
+		const mapCoords = helperFunc.getMapCoords(linkValue);
 		if (mapCoords === 'ERROR') return;
 
 		setGotLink(true);
@@ -96,10 +96,13 @@ const ChurchForm = () => {
 		fetchMapCity(mapCoords).then((res) => {
 			cityRef.current.value = res;
 		});
-		nameRef.current.value = getPlaceName(linkValue);
+		nameRef.current.value = helperFunc.getPlaceName(linkValue);
+
 		fetchMapAdress(mapCoords).then((res) => {
 			if (adressRef.current !== undefined) {
-				adressRef.current.value = `${res.road} ${res.number}`;
+				adressRef.current.value = `${res.road || res.village} ${
+					res.house_number
+				}`;
 				setAdressShrink(true);
 			}
 		});
@@ -120,15 +123,15 @@ const ChurchForm = () => {
 			hours: currentHoursList,
 		};
 
-		const alertMessage = churchFormAlertMessage(church);
+		const alertMessage = helperFunc.churchFormAlertMessage(church);
 		if (alertMessage !== undefined) return alert(alertMessage);
 
 		if (!isFormUpdating) {
 			church.id = uuid();
-			dispatch(thunkChurchAdd(church));
+			dispatch(thunks.thunkChurchAdd(church));
 		}
 		if (isFormUpdating) {
-			dispatch(actionChurchUpdate(church));
+			dispatch(thunks.thunkChurchUpdate(church));
 		}
 
 		nameRef.current.value = '';
@@ -150,100 +153,38 @@ const ChurchForm = () => {
 			/>
 			<h2>Formularz</h2>
 			<form>
-				<Input
-					labelText='Pinezka'
-					required={true}
-					helperText={
-						<span>
-							Link do pinezki map{' '}
-							{hasProperty('link') ? (
-								<a
-									href={googleRef.current.value}
-									alt='mapy google'
-									target='_blank'>
-									Google
-								</a>
-							) : (
-								'Google'
-							)}
-						</span>
-					}
-					placeholder='Google Maps'
-					thisRef={googleRef}
-					shrink={googleShrink}
-					setUnShrink={() =>
-						googleRef.current.value !== '' || setGoogleShrink(false)
-					}
-					setShrink={() => setGoogleShrink(true)}
-					onChange={onLinkChangeHandler}
+				<GooglePin
+					googleRef={googleRef}
+					hasProperty={hasProperty}
+					setGoogleShrink={setGoogleShrink}
+					googleShrink={googleShrink}
+					onLinkChangeHandler={onLinkChangeHandler}
 				/>
-				<Input
-					labelText='Nazwa'
-					required={true}
-					helperText='Pełna nazwa parafii'
-					placeholder='nazwa parafii'
-					thisRef={nameRef}
-					shrink={nameShrink}
-					setUnShrink={() =>
-						nameRef.current.value !== '' || setNameShrink(false)
-					}
-					setShrink={() => setNameShrink(true)}
-					disabled={gotLink}
+				<NameInput
+					nameRef={nameRef}
+					nameShrink={nameShrink}
+					setNameShrink={setNameShrink}
+					gotLink={gotLink}
 				/>
 
-				<Input
-					labelText='Adress'
-					required={true}
-					helperText='Pełen adress wraz numerem lokalu'
-					placeholder='adress'
-					thisRef={adressRef}
-					shrink={adressShrink}
-					setUnShrink={() =>
-						adressRef.current.value !== '' || setAdressShrink(false)
-					}
-					setShrink={() => setAdressShrink(true)}
-					disabled={gotLink}
+				<AdreesInput
+					adressRef={adressRef}
+					adressShrink={adressShrink}
+					gotLink={gotLink}
+					setAdressShrink={setAdressShrink}
 				/>
 				<div className={styles['split-on-two']}>
-					<Input
-						labelText='Miasto'
-						required={true}
-						placeholder='miasto'
-						helperText='miasto, nie diecezja'
-						thisRef={cityRef}
-						shrink={cityShrink}
-						setUnShrink={() =>
-							cityRef.current.value !== '' || setCityShrink(false)
-						}
-						setShrink={() => setCityShrink(true)}
-						disabled={gotLink}
+					<CityInput
+						gotLink={gotLink}
+						cityRef={cityRef}
+						setCityShrink={setCityShrink}
+						cityShrink={cityShrink}
 					/>
-					<Input
-						labelText='Strona parafii'
-						helperText={
-							<span>
-								Link do{' '}
-								{hasProperty('website') ? (
-									<a
-										href={websiteRef.current.value}
-										alt='link do strony'
-										target='_blank'>
-										strony parafii
-									</a>
-								) : (
-									'strony parafii'
-								)}
-								, najlepiej do zakładki o Mszach Świętych
-							</span>
-						}
-						placeholder='strona parafii'
-						thisRef={websiteRef}
-						shrink={websiteShrink}
-						setUnShrink={() =>
-							websiteRef.current.value !== '' ||
-							setWebsiteShrink(false)
-						}
-						setShrink={() => setWebsiteShrink(true)}
+					<WebsiteInput
+						setWebsiteShrink={setWebsiteShrink}
+						websiteRef={websiteRef}
+						websiteShrink={websiteShrink}
+						hasProperty={hasProperty}
 					/>
 				</div>
 

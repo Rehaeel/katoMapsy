@@ -25,16 +25,19 @@ export const thunkFetchUser = (token) => async (dispatch, _) => {
 };
 
 export const thunkCreateUser = (user) => async (dispatch, _) => {
-	const tokenResponse = await fetchUserCreate(user);
-	window.localStorage.setItem('token', tokenResponse.data);
-	dispatch(actionLoginUser());
-
-	const userResponse = await fetchUser(tokenResponse.data);
-	const name = userResponse.data;
-
-	dispatch(actionSetUser(name));
-
-	return name;
+	await fetchUserCreate(user)
+		.then((res) => {
+			window.localStorage.setItem('token', res.data);
+			dispatch(actionLoginUser());
+			return res.data;
+		})
+		.then((token) => fetchUser(token))
+		.then((res) => res.data)
+		.then((user) => {
+			const [name, email] = user;
+			dispatch(actionSetUser(name, email));
+			return user;
+		});
 };
 
 export const thunkLogoutUser = () => (dispatch, _) => {

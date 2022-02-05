@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './hoursAdder.module.css';
 import { selectOptions } from '../../../../constants';
 
@@ -17,11 +17,8 @@ import Button from '../../../button/button';
 import close from '../../../icons/close.svg';
 
 import { v4 as uuid } from 'uuid';
-import {
-	customSelectTheme,
-	rangeAdderAlertMessage,
-	sortHours,
-} from '../../../helpers/helperFunctions';
+import * as helperFunc from '../../../helpers/helperFunctions';
+import { useSetRangeValues } from '../../../helpers/hooks';
 
 const HoursAdder = (props) => {
 	const dispatch = useDispatch();
@@ -54,49 +51,16 @@ const HoursAdder = (props) => {
 		dispatch(formActions.actionResetCurrentRange());
 	};
 
-	useEffect(() => {
-		if (
-			currentRange.holySundays[0] === '' &&
-			currentRange.weekdays[0] === ''
-		) {
-			return init();
-		}
-
-		setSundayValue(
-			currentRange.holySundays.map((hour) => ({
-				value: hour,
-				label: hour,
-			}))
-		);
-		setWeekValue(
-			currentRange.weekdays.map((hour) => ({
-				value: hour,
-				label: hour,
-			}))
-		);
-
-		if (currentRange.interval !== true) {
-			setIsFullYear(false);
-			setShowDatePicker(true);
-			const rangeArr = currentRange.interval.split('-');
-			const startDate = new Date(
-				new Date().getFullYear(),
-				rangeArr[0].split('.')[1] - 1,
-				rangeArr[0].split('.')[0]
-			);
-			const endDate = new Date(
-				new Date().getFullYear(),
-				rangeArr[1].split('.')[1] - 1,
-				rangeArr[1].split('.')[0]
-			);
-			const { key } = initialSelection[0];
-
-			setSelection([{ startDate, endDate, key }]);
-		} else {
-			setIsFullYear(true);
-			setShowDatePicker(false);
-		}
-	}, [currentRange]);
+	useSetRangeValues({
+		currentRange,
+		setSundayValue,
+		setWeekValue,
+		setIsFullYear,
+		setShowDatePicker,
+		initialSelection,
+		setSelection,
+		init,
+	});
 
 	const convertIntervalIntoDDMM = (interval) =>
 		interval
@@ -115,7 +79,10 @@ const HoursAdder = (props) => {
 		);
 
 	const onSubmitHandler = () => {
-		const alertMessage = rangeAdderAlertMessage(sundayValue, weekValue);
+		const alertMessage = helperFunc.rangeAdderAlertMessage(
+			sundayValue,
+			weekValue
+		);
 		if (alertMessage !== undefined) return alert(alertMessage);
 
 		const dateRange = {
@@ -125,8 +92,10 @@ const HoursAdder = (props) => {
 				`${convertIntervalIntoDDMM(
 					selection[0].startDate
 				)}-${convertIntervalIntoDDMM(selection[0].endDate)}`,
-			holySundays: sortHours(sundayValue.map((el) => el.value)),
-			weekdays: sortHours(weekValue.map((el) => el.value)),
+			holySundays: helperFunc.sortHours(
+				sundayValue.map((el) => el.value)
+			),
+			weekdays: helperFunc.sortHours(weekValue.map((el) => el.value)),
 		};
 
 		if (currentHoursList[0].id === '') {
@@ -177,7 +146,7 @@ const HoursAdder = (props) => {
 						value={weekValue}
 						onChange={setWeekValue}
 						placeholder='zaznacz godziny'
-						theme={customSelectTheme}
+						theme={helperFunc.customSelectTheme}
 						closeMenuOnSelect={false}
 						isClearable={true}
 						ref={props.weekSelectRef}
@@ -193,9 +162,10 @@ const HoursAdder = (props) => {
 						value={sundayValue}
 						onChange={setSundayValue}
 						placeholder='zaznacz godziny'
-						theme={customSelectTheme}
+						theme={helperFunc.customSelectTheme}
 						closeMenuOnSelect={false}
 						isClearable
+						ref={props.sundaySelectRef}
 						tabSelectsValue={false}
 					/>
 				</div>
@@ -223,9 +193,9 @@ const HoursAdder = (props) => {
 									setIsFullYear(e.target.checked);
 								}}
 								sx={{
-									color: '#59981a',
+									color: 'var(--cl-light)',
 									'&.Mui-checked': {
-										color: '#59981a',
+										color: 'var(--cl-light)',
 									},
 								}}
 							/>
@@ -242,7 +212,7 @@ const HoursAdder = (props) => {
 									setSelection([item.selection])
 								}
 								ranges={selection}
-								rangeColors={['#59981a']}
+								rangeColors={['var(--cl-light)']}
 								locale={plLang}
 								showMonthAndYearPickers={true}
 								maxDate={

@@ -6,6 +6,7 @@ import edit from '../../../icons/pen.svg';
 import * as formActions from '../../../../store/form/actionCreator';
 import { selectForm } from '../../../../store/selectors';
 import { useEffect, useState } from 'react';
+import { convertWholeYear } from '../../../helpers/helperFunctions';
 
 const HoursList = () => {
 	const dispatch = useDispatch();
@@ -16,28 +17,6 @@ const HoursList = () => {
 	useEffect(() => {
 		setHoursList(currentHoursList);
 	}, [currentHoursList]);
-
-	const convertWholeYear = (interval) => {
-		if (typeof interval === 'string') {
-			const listArr = interval.split('-').map((date, i) => {
-				if (i === 0)
-					return (
-						<p key={date}>
-							<span className='grayed-out'>od: </span>
-							{date}
-						</p>
-					);
-				else
-					return (
-						<p key={date}>
-							<span className='grayed-out'>do: </span>
-							{date}
-						</p>
-					);
-			});
-			return listArr;
-		} else return [<p key={interval.toString()}>cały rok</p>];
-	};
 
 	const printOutHours = (list, name) =>
 		[<span className='grayed-out'>{name}</span>, ...list].map((hour, i) => {
