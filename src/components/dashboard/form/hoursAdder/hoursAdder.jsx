@@ -10,9 +10,11 @@ import { DateRange } from 'react-date-range';
 import { pl as plLang } from 'react-date-range/src/locale/index';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { Checkbox, FormControlLabel } from '@mui/material';
+
 import Button from '../../../button/button';
 import close from '../../../icons/close.svg';
 
@@ -93,9 +95,9 @@ const HoursAdder = (props) => {
 					selection[0].startDate
 				)}-${convertIntervalIntoDDMM(selection[0].endDate)}`,
 			holySundays: helperFunc.sortHours(
-				sundayValue.map((el) => el.value)
+				sundayValue.map((el) => el.label)
 			),
-			weekdays: helperFunc.sortHours(weekValue.map((el) => el.value)),
+			weekdays: helperFunc.sortHours(weekValue.map((el) => el.label)),
 		};
 
 		if (currentHoursList[0].id === '') {

@@ -9,9 +9,3 @@
 	border-left: 1.5px solid var(--cl-light);
 	cursor: pointer;
 }
-
-@media screen and (max-width: 765px) {
-	.button {
-		width: 100%;
-	}
-}

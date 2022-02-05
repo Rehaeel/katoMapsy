@@ -1,15 +1,23 @@
 import axios from 'axios';
 
+///////////////////////////////////////////////////////////
+
 export const fetchLogInUser = async (user) =>
 	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/user`, {
 		headers: user,
 	});
 
+///////////////////////////////////////////////////////////
+
 export const fetchUser = async (token) =>
 	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/user/${token}`);
 
+///////////////////////////////////////////////////////////
+
 export const fetchUserCreate = async (user) =>
 	await axios.post(`${process.env.REACT_APP_ENDPOINT_URL}/user`, user);
+
+///////////////////////////////////////////////////////////
 
 export const fetchMapCity = async (coords) =>
 	await axios
@@ -18,6 +26,8 @@ export const fetchMapCity = async (coords) =>
 		)
 		.then((res) => res.data.address.county);
 
+///////////////////////////////////////////////////////////
+
 export const fetchMapAdress = async (coords) =>
 	await axios
 		.get(
@@ -25,8 +35,12 @@ export const fetchMapAdress = async (coords) =>
 		)
 		.then((res) => res.data.address);
 
+///////////////////////////////////////////////////////////
+
 export const fetchChurchIntoDB = async (church) =>
 	await axios.post(`${process.env.REACT_APP_ENDPOINT_URL}/church`, church);
+
+///////////////////////////////////////////////////////////
 
 export const fetchChurchUpdate = async (church) =>
 	await axios
@@ -36,10 +50,14 @@ export const fetchChurchUpdate = async (church) =>
 		)
 		.then((res) => res.data);
 
+///////////////////////////////////////////////////////////
+
 export const fetchAllUserChurches = async (email) =>
 	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/church`, {
 		headers: { email: email },
 	});
+
+///////////////////////////////////////////////////////////
 
 export const fetchAllChurches = async () =>
 	await axios.get(`${process.env.REACT_APP_ENDPOINT_URL}/churches/all`);

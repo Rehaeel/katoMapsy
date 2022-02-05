@@ -1,12 +1,13 @@
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../store/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, selectChurch } from '../../store/selectors';
+import { thunkLogoutUser } from '../../store/user/thunks';
+
 import styles from './header.module.css';
+
 import logo from '../icons/logo.svg';
 import Button from '../button/button';
-import { thunkLogoutUser } from '../../store/user/thunks';
-import { useDispatch } from 'react-redux';
+
 import { useNavigate } from 'react-router-dom';
-import { selectChurch } from '../../store/selectors';
 
 import logout from '../icons/log-out.svg';
 import Shortcuts from './shortcuts';

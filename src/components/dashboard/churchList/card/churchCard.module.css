@@ -17,7 +17,7 @@
 	cursor: pointer;
 }
 
-.card:before {
+.card::before {
 	content: url('../../../icons/cross.svg');
 	display: flex;
 	align-items: center;

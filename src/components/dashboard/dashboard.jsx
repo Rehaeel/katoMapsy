@@ -8,6 +8,7 @@ import ChurchForm from './form/churchForm';
 import MapDisplay from './map/map';
 import SpinningWheel from '../helpers/spinningWheel';
 import HoursAdder from './form/hoursAdder/hoursAdder';
+
 import { useEnterPressListener } from '../helpers/hooks';
 
 const Dashboard = (props) => {

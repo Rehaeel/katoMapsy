@@ -54,7 +54,7 @@
 	transition: all calc(var(--transition-time) / 2) ease;
 }
 
-.shortcuts > ul:before {
+.shortcuts > ul::before {
 	content: '';
 	position: absolute;
 	top: -14px;

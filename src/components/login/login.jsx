@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import sha256 from 'sha256';
+
+import { useDispatch } from 'react-redux';
 import { thunkLoginUser, thunkFetchUser } from '../../store/user/thunks';
+
+import sha256 from 'sha256';
 
 import Button from '../button/button';
 import Input from '../input/input';

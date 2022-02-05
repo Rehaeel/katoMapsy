@@ -2,23 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './churchForm.module.css';
 import { v4 as uuid } from 'uuid';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionHideForm } from '../../../store/form/actionCreator';
+import { selectForm } from '../../../store/selectors';
+import { fetchMapAdress, fetchMapCity } from '../../../store/services';
 import * as thunks from '../../../store/church/thunks';
 
 import close from '../../icons/close.svg';
-import { useSelector } from 'react-redux';
-import { selectForm } from '../../../store/selectors';
 import Button from '../../button/button';
-import * as helperFunc from '../../helpers/helperFunctions';
-import { fetchMapAdress, fetchMapCity } from '../../../store/services';
-
 import HoursList from './hoursList/hoursList';
 import { GooglePin } from './inputs/pin';
 import { WebsiteInput } from './inputs/website';
 import { CityInput } from './inputs/city';
 import { AdreesInput } from './inputs/adress';
 import { NameInput } from './inputs/name';
+
+import * as helperFunc from '../../helpers/helperFunctions';
 
 const ChurchForm = () => {
 	const dispatch = useDispatch();

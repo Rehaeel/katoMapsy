@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { useDispatch } from 'react-redux';
 import { thunkCreateUser } from '../../store/user/thunks';
 
-import styles from './registration.module.css';
-
 import Button from '../button/button';
 import Input from '../input/input';
+
 import sha256 from 'sha256';
-import { Link, useNavigate } from 'react-router-dom';
 
 const Registration = () => {
 	const dispatch = useDispatch();
@@ -46,9 +46,7 @@ const Registration = () => {
 	return (
 		<>
 			<h1>Nie masz konta? Załóż!</h1>
-			<form
-				className={`${styles.login} vertical-flex`}
-				onSubmit={onSubmitHanddler}>
+			<form className={`vertical-flex`} onSubmit={onSubmitHanddler}>
 				<Input
 					labelText='imię'
 					placeholder='imię'
@@ -90,7 +88,7 @@ const Registration = () => {
 
 				<Button type='submit'>Wskakuj !</Button>
 			</form>
-			<p className={styles.registration}>
+			<p>
 				Masz konto? <Link to='/login'>Zaloguj się</Link>
 			</p>
 		</>

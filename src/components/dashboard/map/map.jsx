@@ -12,6 +12,7 @@ import greenIcon from '../../icons/leaflet-marker-green.svg';
 
 import { getMapCoords } from '../../helpers/helperFunctions';
 import * as hooks from '../../helpers/hooks';
+
 import PopupHours from './popupHours';
 import NameAndAdress from './nameAndAdress';
 

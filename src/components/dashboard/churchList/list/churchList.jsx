@@ -1,14 +1,13 @@
+import { useEffect, useRef, useState } from 'react';
 import styles from './churchList.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectChurch, selectForm } from '../../../../store/selectors';
+import * as formActions from '../../../../store/form/actionCreator';
 
 import Button from '../../../button/button';
 import ChurchCard from '../card/churchCard';
-import * as formActions from '../../../../store/form/actionCreator';
 import SearchBar from './searchBar/searchBar';
-import { useEffect, useRef, useState } from 'react';
-
 import enter from '../../../icons/enter.svg';
 
 const ChurchList = (props) => {

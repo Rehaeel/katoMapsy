@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
+import { selectForm } from './store/selectors';
 
 import FullWidthContainer from './components/helpers/fullWidthContainer';
 import Login from './components/login/login';
 import Registration from './components/register/registration';
 import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
-import { selectForm } from './store/selectors';
-import * as hooks from './components/helpers/hooks';
 import GoOnMobile from './components/dashboard/goOnMobile/goOnMobile';
+
+import * as hooks from './components/helpers/hooks';
 
 function App() {
 	const searchRef = useRef();

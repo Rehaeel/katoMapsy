@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 const PopupHours = (props) => {
 	const sortedList = props.hours.sort((a, b) => {
 		if (a.interval === true) return 1;

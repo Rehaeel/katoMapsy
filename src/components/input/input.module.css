@@ -17,7 +17,3 @@
 	color: var(--cl-font);
 	font-size: 0.8em;
 }
-
-.Mui-disabled {
-	-webkit-text-fill-color: #fff !important;
-}

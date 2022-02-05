@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
+import * as formActions from '../../../../store/form/actionCreator';
+import { selectForm } from '../../../../store/selectors';
 
 import styles from './hoursList.module.css';
 import edit from '../../../icons/pen.svg';
 
-import * as formActions from '../../../../store/form/actionCreator';
-import { selectForm } from '../../../../store/selectors';
-import { useEffect, useState } from 'react';
 import { convertWholeYear } from '../../../helpers/helperFunctions';
 
 const HoursList = () => {

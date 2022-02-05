@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { actionsetCurrMapPos } from '../../store/form/actionCreator';
+import * as formActions from '../../store/form/actionCreator';
 import { selectChurch, selectForm, selectUser } from '../../store/selectors';
 import { fetchAllChurches } from '../../store/services';
+import { thunkFetchUser } from '../../store/user/thunks';
+import { thunkFetchChurses } from '../../store/church/thunks';
+
 import { getMapCoords, getPlaceName } from './helperFunctions';
+
 import L from 'leaflet';
 import leafletMarker from '../icons/leaflet-marker.svg';
-import { useNavigate } from 'react-router-dom';
-import { thunkFetchUser } from '../../store/user/thunks';
-import * as formActions from '../../store/form/actionCreator';
-import { thunkFetchChurses } from '../../store/church/thunks';
 
 ///////////////////////////////////////////////////////////////
 
@@ -44,7 +46,11 @@ export const useCurrMapPosition = () => {
 
 	useEffect(() => {
 		if (currentChurch.link !== '')
-			dispatch(actionsetCurrMapPos(getMapCoords(currentChurch.link)));
+			dispatch(
+				formActions.actionsetCurrMapPos(
+					getMapCoords(currentChurch.link)
+				)
+			);
 	}, [currentChurch]);
 };
 
@@ -110,7 +116,7 @@ export const useSetCurrentUserPosition = (map, zoom, mapPosition) => {
 
 ///////////////////////////////////////////////////////////////
 
-export const useFlyTo = (map, mapPosition, zoom) => {
+export const useFlyTo = (map, mapPosition, zoom) =>
 	useEffect(() => {
 		const options = {
 			animate: true,
@@ -118,7 +124,6 @@ export const useFlyTo = (map, mapPosition, zoom) => {
 		};
 		if (map) map.flyTo(mapPosition, zoom, options);
 	}, [mapPosition, map]);
-};
 
 ///////////////////////////////////////////////////////////////
 
@@ -166,14 +171,13 @@ export const useFetchAllDBChurches = (map) => {
 
 ///////////////////////////////////////////////////////////////
 
-export const useSearchStopPropagation = (searchRef) => {
+export const useSearchStopPropagation = (searchRef) =>
 	useEffect(() => {
 		if (searchRef.current !== undefined)
 			searchRef.current.addEventListener('keydown', (e) =>
 				e.stopPropagation()
 			);
 	}, [searchRef]);
-};
 
 ///////////////////////////////////////////////////////////////
 
