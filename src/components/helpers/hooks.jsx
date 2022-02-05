@@ -85,10 +85,14 @@ export const useSetCurrentUserPosition = (map, zoom, mapPosition) => {
 				.setContent(`<p class='my-position'>tu jesteś</p>`)
 				.openOn(map);
 
-			L.marker(userPos, { icon }).bindPopup(popup).openPopup().addTo(map);
+			const marker = L.marker(userPos, { icon })
+				.bindPopup(popup)
+				.openPopup();
+
+			marker.addTo(map);
 
 			if (!gotFlight) {
-				const flightOptions = { animate: true, duration: 0.8 };
+				const flightOptions = { animate: true, duration: 0.4 };
 				setTimeout(() => {
 					setGotFlight(true);
 					map.flyTo(userPos, 14, flightOptions);
@@ -98,6 +102,8 @@ export const useSetCurrentUserPosition = (map, zoom, mapPosition) => {
 					map.flyTo(mapPosition, zoom, flightOptions);
 				}, 3500);
 			}
+
+			return () => marker.removeFrom(map);
 		}
 	}, [userPos]);
 };
