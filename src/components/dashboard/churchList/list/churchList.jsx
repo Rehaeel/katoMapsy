@@ -40,6 +40,10 @@ const ChurchList = (props) => {
 		dispatch(formActions.actionSetZoom(16));
 	};
 
+	const filterBy = (church) =>
+		church.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+		church.city.toLowerCase().includes(searchValue.toLowerCase());
+
 	return (
 		!showForm && (
 			<section
@@ -65,11 +69,7 @@ const ChurchList = (props) => {
 												if (searchValue === '')
 													return true;
 
-												return church.name
-													.toLowerCase()
-													.includes(
-														searchValue.toLowerCase()
-													);
+												return filterBy(church);
 											})
 											.filter(
 												(church) => church.city === city
@@ -83,11 +83,7 @@ const ChurchList = (props) => {
 									.filter((church) => {
 										if (searchValue === '') return true;
 
-										return church.name
-											.toLowerCase()
-											.includes(
-												searchValue.toLowerCase()
-											);
+										return filterBy(church);
 									})
 									.filter((church) => church.city === city)
 									.map((church) => {

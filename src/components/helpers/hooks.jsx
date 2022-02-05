@@ -127,8 +127,11 @@ export const useFetchAllDBChurches = (map) => {
 
 	const icon = new L.Icon({
 		iconUrl: leafletMarker,
-		popupAnchor: [4, -40],
-		iconAnchor: [-10, 40],
+		iconAnchor: [13, 41],
+		iconSize: [25, 41],
+		shadowUrl: '/shadow.png',
+		shadowAnchor: [15, 41],
+		popupAnchor: [0, -20],
 	});
 
 	useEffect(() => {
