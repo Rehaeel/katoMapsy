@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { actionHideForm } from '../../../store/form/actionCreator';
 import * as thunks from '../../../store/church/thunks';
 
-import Input from '../../input/input';
 import close from '../../icons/close.svg';
 import { useSelector } from 'react-redux';
 import { selectForm } from '../../../store/selectors';
@@ -32,23 +31,23 @@ const ChurchForm = () => {
 	const [nameShrink, setNameShrink] = useState(hasProperty('name'));
 	useEffect(() => {
 		setNameShrink(hasProperty('name'));
-	}, [currentChurch.name]);
+	}, [currentChurch.name, hasProperty]);
 	const [cityShrink, setCityShrink] = useState(hasProperty('city'));
 	useEffect(() => {
 		setCityShrink(hasProperty('city'));
-	}, [currentChurch.city]);
+	}, [currentChurch.city, hasProperty]);
 	const [adressShrink, setAdressShrink] = useState(hasProperty('adress'));
 	useEffect(() => {
 		setAdressShrink(hasProperty('adress'));
-	}, [currentChurch.adress]);
+	}, [currentChurch.adress, hasProperty]);
 	const [websiteShrink, setWebsiteShrink] = useState(hasProperty('website'));
 	useEffect(() => {
 		setWebsiteShrink(hasProperty('website'));
-	}, [currentChurch.website]);
+	}, [currentChurch.website, hasProperty]);
 	const [googleShrink, setGoogleShrink] = useState(hasProperty('link'));
 	useEffect(() => {
 		setGoogleShrink(hasProperty('link'));
-	}, [currentChurch.link]);
+	}, [currentChurch.link, hasProperty]);
 
 	const nameRef = useRef();
 	const cityRef = useRef();

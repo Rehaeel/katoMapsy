@@ -14,7 +14,8 @@ export const GooglePin = (props) => (
 							props.googleRef.current.value
 						}
 						alt='mapy google'
-						target='_blank'>
+						target='_blank'
+						rel='noreferrer'>
 						Google
 					</a>
 				) : (

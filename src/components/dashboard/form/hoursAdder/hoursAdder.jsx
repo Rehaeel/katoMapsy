@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './hoursAdder.module.css';
 import { selectOptions } from '../../../../constants';
 

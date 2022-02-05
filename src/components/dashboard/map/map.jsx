@@ -5,7 +5,7 @@ import { selectChurch, selectForm } from '../../../store/selectors';
 import styles from './map.module.css';
 
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import L, { marker } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen.js';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import greenIcon from '../../icons/leaflet-marker-green.svg';
@@ -58,25 +58,25 @@ const MapDisplay = () => {
 						url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
 					/>
 					{churches.map((church) => {
-						if (!church.link) return;
-						return (
-							<Marker
-								key={church.id}
-								position={getMapCoords(church.link)}
-								icon={markerPin}
-								riseOnHover={true}>
-								<Popup>
-									<NameAndAdress
-										church={church}
-										styles={styles}
-									/>
-									<PopupHours
-										hours={church.hours}
-										styles={styles}
-									/>
-								</Popup>
-							</Marker>
-						);
+						if (church.link)
+							return (
+								<Marker
+									key={church.id}
+									position={getMapCoords(church.link)}
+									icon={markerPin}
+									riseOnHover={true}>
+									<Popup>
+										<NameAndAdress
+											church={church}
+											styles={styles}
+										/>
+										<PopupHours
+											hours={church.hours}
+											styles={styles}
+										/>
+									</Popup>
+								</Marker>
+							);
 					})}
 				</MapContainer>
 			</div>

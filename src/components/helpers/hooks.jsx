@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { thunkFetchUser } from '../../store/user/thunks';
 import * as formActions from '../../store/form/actionCreator';
 import { thunkFetchChurses } from '../../store/church/thunks';
-import { actionChurchListSet } from '../../store/church/actionCreator';
 
 ///////////////////////////////////////////////////////////////
 

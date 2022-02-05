@@ -10,7 +10,8 @@ export const WebsiteInput = (props) => (
 					<a
 						href={props.websiteRef.current.value}
 						alt='link do strony'
-						target='_blank'>
+						target='_blank'
+						rel='noreferrer'>
 						strony parafii
 					</a>
 				) : (

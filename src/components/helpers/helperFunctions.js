@@ -52,7 +52,7 @@ export const customSelectTheme = (theme) => ({
 
 /////////////////////////////////////////////////////////////////////
 
-export const customInputMuiTheme = (theme) => ({
+export const customInputMuiTheme = () => ({
 	textField: {
 		width: '90%',
 		marginLeft: 'auto',
