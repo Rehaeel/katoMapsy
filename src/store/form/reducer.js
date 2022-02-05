@@ -77,6 +77,14 @@ export const formReducer = (state = initialFormState, action) => {
 				}),
 			};
 
+		case actions.FROM_DELETE_HOUR:
+			return {
+				...state,
+				currentHoursList: state.currentHoursList.filter(
+					(range) => range.id !== action.payload
+				),
+			};
+
 		case actions.FORM_SET_CURRENT_RANGE:
 			return {
 				...state,

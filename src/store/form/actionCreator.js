@@ -51,6 +51,11 @@ export const actionUpdateHoursInList = (range) => ({
 	payload: range,
 });
 
+export const actionDeleteHourInList = (rangeId) => ({
+	type: actions.FROM_DELETE_HOUR,
+	payload: rangeId,
+});
+
 export const actionResetCurrentRange = () => ({
 	type: actions.FORM_RESET_CURRENT_RANGE,
 });

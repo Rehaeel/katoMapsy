@@ -6,6 +6,7 @@ import { selectForm } from '../../../../store/selectors';
 
 import styles from './hoursList.module.css';
 import edit from '../../../icons/pen.svg';
+import trash from '../../../icons/trash.svg';
 
 import { convertWholeYear } from '../../../helpers/helperFunctions';
 
@@ -29,6 +30,9 @@ const HoursList = () => {
 		dispatch(formActions.actionSetRangeIsUpdating());
 		dispatch(formActions.actionSetCurrentRange(hours));
 	};
+
+	const deleteHoursHandler = (rangeId) =>
+		dispatch(formActions.actionDeleteHourInList(rangeId));
 
 	return (
 		<ul className={styles['hours-list']}>
@@ -55,10 +59,17 @@ const HoursList = () => {
 								)}
 							</ul>
 						</div>
-						<div
-							className={styles['edit-container']}
-							onClick={() => editHoursHandler(range)}>
-							<img src={edit} alt='edytuj godziny' />
+						<div className={styles.modifications}>
+							<div
+								className={styles['edit-container']}
+								onClick={() => editHoursHandler(range)}>
+								<img src={edit} alt='edytuj godziny' />
+							</div>
+							<div
+								className={styles['delete-container']}
+								onClick={() => deleteHoursHandler(range.id)}>
+								<img src={trash} alt='usuń zakres' />
+							</div>
 						</div>
 					</div>
 				</li>

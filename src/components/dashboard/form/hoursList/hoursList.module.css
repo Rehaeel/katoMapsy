@@ -63,32 +63,46 @@
 	justify-content: center;
 	align-items: center;
 	margin-bottom: var(--gap);
-	padding: var(--gap);
-	padding-left: 0;
+	padding: var(--gap) 0;
 	gap: calc(var(--gap) / 2);
 }
 
-.edit-container {
-	align-self: start;
+.modifications {
 	grid-row: 1 / -1;
-	grid-column: 3/ -1;
-	width: 20px;
-	height: 20px;
+	grid-column: 3 / -1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: calc(100% + calc(var(--gap) * 2) - 2px);
+}
+
+.edit-container,
+.delete-container {
 	cursor: pointer;
-	transform: translateY(calc(0px - var(--gap))) translateX(var(--gap))
-		scale(1);
 	border: 1px solid var(--cl-background-light);
 	background-color: var(--cl-background-dark);
 	border-radius: calc(var(--border-radius) / 3);
 	padding: 2px;
+	transform: scale(1);
 	box-shadow: -2px 2px 4px var(--cl-background-dark);
-	transition: all calc(var(--transition) / 4) ease;
+	z-index: 1;
+	transition: all calc(var(--transition)) ease;
 }
 
-.edit-container:hover {
-	transform: translateY(calc(0px - var(--gap))) translateX(var(--gap))
-		scale(1.3);
-	box-shadow: -4px 4px 4px var(--cl-background-dark);
+.edit-container {
+	width: 23px;
+	height: 23px;
+}
+
+.delete-container {
+	width: 25px;
+	height: 25px;
+}
+
+.edit-container:hover,
+.delete-container:hover {
+	transform: scale(1.2);
+	box-shadow: -3px 3px 4px var(--cl-background-dark);
 }
 
 .range {
