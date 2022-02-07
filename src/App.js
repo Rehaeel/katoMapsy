@@ -15,23 +15,12 @@ import GoOnMobile from './components/dashboard/goOnMobile/goOnMobile';
 import * as hooks from './components/helpers/hooks';
 
 function App() {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const searchRef = useRef();
 	const sundaySelectRef = useRef();
 	const weekSelectRef = useRef();
 	const chruchlistRef = useRef();
 
-	useEffect(() => {
-		if (window.localStorage.getItem('token'))
-			dispatch(
-				thunkFetchUser(window.localStorage.getItem('token'))
-			).catch(() => {
-				dispatch(thunkLogoutUser());
-				navigate('/login');
-			});
-		else navigate('/login');
-	}, []);
+	hooks.useCheckUserToken();
 
 	const { showForm } = useSelector(selectForm);
 

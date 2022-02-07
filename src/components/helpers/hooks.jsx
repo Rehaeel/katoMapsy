@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as formActions from '../../store/form/actionCreator';
 import { selectChurch, selectForm, selectUser } from '../../store/selectors';
 import { fetchAllChurches } from '../../store/services';
-import { thunkFetchUser } from '../../store/user/thunks';
+import { thunkFetchUser, thunkLogoutUser } from '../../store/user/thunks';
 import { thunkFetchChurses } from '../../store/church/thunks';
 
 import { getMapCoords, getPlaceName } from './helperFunctions';
@@ -24,6 +24,24 @@ export const useScreenSizeListener = (setScreenSize) => {
 		window.addEventListener('resize', windowResize);
 
 		return () => window.removeEventListener('resize', windowResize);
+	}, []);
+};
+
+///////////////////////////////////////////////////////////////
+
+export const useCheckUserToken = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (window.localStorage.getItem('token'))
+			dispatch(
+				thunkFetchUser(window.localStorage.getItem('token'))
+			).catch(() => {
+				dispatch(thunkLogoutUser());
+				navigate('/login');
+			});
+		else navigate('/login');
 	}, []);
 };
 
