@@ -34,8 +34,8 @@ const Login = () => {
 				return token.token;
 			})
 			.then((token) => {
-				dispatch(thunkFetchUser(token));
 				navigate('/');
+				dispatch(thunkFetchUser(token));
 			})
 			.catch((err) => {
 				setWrongInput(true);
@@ -44,8 +44,15 @@ const Login = () => {
 			});
 	};
 
+	const slashPressedHandler = (e) => {
+		if (e.code === 'Slash') emailRef.current.focus();
+	};
+
 	useEffect(() => {
 		emailRef.current.focus();
+		document.addEventListener('keydown', slashPressedHandler);
+		return () =>
+			document.removeEventListener('keydown', slashPressedHandler);
 	}, []);
 
 	return (
