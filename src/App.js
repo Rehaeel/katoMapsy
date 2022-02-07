@@ -26,7 +26,10 @@ function App() {
 		if (window.localStorage.getItem('token'))
 			dispatch(
 				thunkFetchUser(window.localStorage.getItem('token'))
-			).catch(() => dispatch(thunkLogoutUser()));
+			).catch(() => {
+				dispatch(thunkLogoutUser());
+				navigate('/login');
+			});
 		else navigate('/login');
 	}, []);
 
