@@ -129,7 +129,7 @@ const HoursAdder = (props) => {
 					<h2>
 						Dodaj godziny{' '}
 						<span className={`grayed-out ${styles.shortcut}`}>
-							[alt + H]
+							[alt + h]
 						</span>
 					</h2>
 					<Button onClick={onSubmitHandler}>
