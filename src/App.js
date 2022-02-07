@@ -1,9 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectForm } from './store/selectors';
-import { thunkFetchUser, thunkLogoutUser } from './store/user/thunks';
 
 import FullWidthContainer from './components/helpers/fullWidthContainer';
 import Login from './components/login/login';
