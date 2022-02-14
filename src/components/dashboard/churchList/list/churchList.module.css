@@ -23,6 +23,7 @@
 }
 
 .list {
+	flex: 1;
 	width: 95%;
 	height: 100%;
 	display: flex;
@@ -58,6 +59,10 @@
 	max-width: 18px;
 }
 
-.church-list > *:last-child {
+.church-list > button {
 	box-shadow: 0 0 10px var(--cl-background-dark);
+	width: 100%;
+	margin-top: calc(var(--gap) * 2);
+	z-index: 10;
+	flex-shrink: 0;
 }
