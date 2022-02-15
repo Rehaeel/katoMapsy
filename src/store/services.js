@@ -24,7 +24,10 @@ export const fetchMapCity = async (coords) =>
 		.get(
 			`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords[0]}&lon=${coords[1]}`
 		)
-		.then((res) => res.data.address.county);
+		.then((res) => {
+			if ('county' in res.data.address) return res.data.address.county;
+			if ('city' in res.data.address) return res.data.address.city;
+		});
 
 ///////////////////////////////////////////////////////////
 

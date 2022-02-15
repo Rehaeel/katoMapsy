@@ -23,7 +23,7 @@ const ChurchForm = () => {
 	const dispatch = useDispatch();
 	const { currentChurch, isFormUpdating, showForm, currentHoursList } =
 		useSelector(selectForm);
-	const [gotLink, setGotLink] = useState(false);
+	const [nameDisabled, setNameDisabled] = useState(false);
 
 	const hasProperty = (prop) => currentChurch[prop] !== '';
 
@@ -32,10 +32,12 @@ const ChurchForm = () => {
 		setNameShrink(hasProperty('name'));
 	}, [currentChurch.name]);
 	const [cityShrink, setCityShrink] = useState(hasProperty('city'));
+	const [cityDisabled, setCityDisabled] = useState(false);
 	useEffect(() => {
 		setCityShrink(hasProperty('city'));
 	}, [currentChurch.city]);
 	const [adressShrink, setAdressShrink] = useState(hasProperty('adress'));
+	const [adressDisabled, setAdressDisabled] = useState(false);
 	useEffect(() => {
 		setAdressShrink(hasProperty('adress'));
 	}, [currentChurch.adress]);
@@ -65,16 +67,22 @@ const ChurchForm = () => {
 			googleRef.current.value !== '' &&
 			googleRef.current.value !== undefined;
 
-		if (isLinkPresent) setGotLink(true);
-		else setGotLink(false);
+		if (isLinkPresent) setNameDisabled(true);
+		else setNameDisabled(false);
 
 		(async () => {
 			if (isLinkPresent)
 				return await fetchMapCity(
 					helperFunc.getMapCoords(currentChurch.link)
-				).then((res) => (cityRef.current.value = res));
+				).then((res) => {
+					if (res === undefined) return setCityDisabled(false);
+
+					cityRef.current.value = res;
+					setCityDisabled(true);
+				});
 			else cityRef.current.value = currentChurch.city;
 		})();
+
 		nameRef.current.value = isLinkPresent
 			? helperFunc.getPlaceName(currentChurch.link)
 			: currentChurch.name;
@@ -87,21 +95,30 @@ const ChurchForm = () => {
 		const mapCoords = helperFunc.getMapCoords(linkValue);
 		if (mapCoords === 'ERROR') return;
 
-		setGotLink(true);
+		setNameDisabled(true);
 		setNameShrink(true);
 		setCityShrink(true);
 
 		fetchMapCity(mapCoords).then((res) => {
+			if (res === undefined) return setCityDisabled(false);
+
 			cityRef.current.value = res;
+			setCityDisabled(true);
 		});
 		nameRef.current.value = helperFunc.getPlaceName(linkValue);
 
 		fetchMapAdress(mapCoords).then((res) => {
-			if (adressRef.current !== undefined) {
+			if ('current' in adressRef) {
+				setAdressDisabled(true);
 				adressRef.current.value = `${res.road || res.village} ${
 					res.house_number
 				}`;
 				setAdressShrink(true);
+				if (adressRef.current.value.includes('undefined')) {
+					adressRef.current.value =
+						adressRef.current.value.replaceAll('undefined', '');
+					setAdressDisabled(false);
+				}
 			}
 		});
 	};
@@ -137,7 +154,7 @@ const ChurchForm = () => {
 		adressRef.current.value = '';
 		websiteRef.current.value = '';
 		googleRef.current.value = '';
-		setGotLink(false);
+		setNameDisabled(false);
 		dispatch(actionHideForm());
 	};
 
@@ -153,35 +170,37 @@ const ChurchForm = () => {
 			<form>
 				<GooglePin
 					googleRef={googleRef}
+					googleShrink={googleShrink}
 					hasProperty={hasProperty}
 					setGoogleShrink={setGoogleShrink}
-					googleShrink={googleShrink}
 					onLinkChangeHandler={onLinkChangeHandler}
 				/>
 				<NameInput
 					nameRef={nameRef}
 					nameShrink={nameShrink}
+					gotLink={nameDisabled}
 					setNameShrink={setNameShrink}
-					gotLink={gotLink}
 				/>
 
 				<AdreesInput
 					adressRef={adressRef}
 					adressShrink={adressShrink}
-					gotLink={gotLink}
+					adressDisabled={adressDisabled}
 					setAdressShrink={setAdressShrink}
+					setAdressDisabled={setAdressDisabled}
 				/>
 				<div className={styles['split-on-two']}>
 					<CityInput
-						gotLink={gotLink}
 						cityRef={cityRef}
-						setCityShrink={setCityShrink}
 						cityShrink={cityShrink}
+						cityDisabled={cityDisabled}
+						setCityShrink={setCityShrink}
+						setCityDisabled={setCityDisabled}
 					/>
 					<WebsiteInput
-						setWebsiteShrink={setWebsiteShrink}
 						websiteRef={websiteRef}
 						websiteShrink={websiteShrink}
+						setWebsiteShrink={setWebsiteShrink}
 						hasProperty={hasProperty}
 					/>
 				</div>
