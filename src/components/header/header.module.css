@@ -1,4 +1,5 @@
 .header {
+	position: relative;
 	width: 100vw;
 	height: var(--nav-height);
 	background-color: var(--cl-background);
@@ -6,25 +7,29 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 5%;
+	padding: 0 5% 0 1%;
 	z-index: 999;
 	border-bottom: 1px solid var(--cl-background-light);
 }
 
-.header > div:first-child {
+.icons {
 	height: 90%;
 	display: inline-flex;
-	gap: calc(var(--gap) * 3);
+	gap: calc(var(--gap) * 4);
 }
 
 .helpers {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	height: 100%;
 	gap: var(--gap);
-	transform: translateX(-60%);
 	z-index: 100;
+}
+
+.logo {
+	width: calc(var(--nav-height) * 1.1);
 }
 
 .shortcuts {
@@ -108,20 +113,33 @@
 	margin-left: 8px;
 }
 
-.github > img {
-	position: relative;
+.github > img,
+.intro > img {
 	width: 40px;
 	cursor: pointer;
 }
 
+.intro > img {
+	width: 30px;
+}
+
 .github::after {
 	content: 'kod źródłowy aplikacji';
+	left: 0px;
+}
+
+.intro::after {
+	content: 'filmik instruktażowy';
+	left: calc(100% - 40px);
+}
+
+.github::after,
+.intro::after {
 	position: absolute;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	top: 0;
-	left: 0px;
 	opacity: 0;
 	width: 100%;
 	height: 100%;
@@ -136,7 +154,8 @@
 	transition: all calc(var(--transition-time) / 2) ease;
 }
 
-.github:hover::after {
+.github:hover::after,
+.intro:hover::after {
 	transform: translateY(80%);
 	opacity: 1;
 }

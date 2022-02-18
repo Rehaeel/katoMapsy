@@ -12,7 +12,6 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import Button from '../../../button/button';
@@ -129,20 +128,33 @@ const HoursAdder = (props) => {
 					<h2>
 						Dodaj godziny{' '}
 						<span className={`grayed-out ${styles.shortcut}`}>
-							[alt + h]
+							[alt + t]
 						</span>
 					</h2>
-					<Button onClick={onSubmitHandler}>
-						{isRangeUpdating
-							? 'aktualizuj godziny'
-							: 'dodaj godziny'}
+					<Button
+						onClick={onSubmitHandler}
+						btnRef={props.addHoursBtnRef}>
+						{isRangeUpdating ? (
+							<p>
+								aktualizuj godziny{' '}
+								<span className='grayed-out-light'>
+									[alt + q]
+								</span>
+							</p>
+						) : (
+							<p>
+								dodaj godziny{' '}
+								<span className='grayed-out-light'>
+									[alt + q]
+								</span>
+							</p>
+						)}
 					</Button>
 				</div>
 
 				<div className={styles['week-days']}>
 					<h3>dni powszednie</h3>
 					<Select
-						components={makeAnimated()}
 						options={selectOptions}
 						isMulti
 						value={weekValue}
@@ -158,7 +170,6 @@ const HoursAdder = (props) => {
 				<div className={styles['holy-sunday']}>
 					<h3>niedziele i święta</h3>
 					<Select
-						components={makeAnimated()}
 						options={selectOptions}
 						isMulti
 						value={sundayValue}

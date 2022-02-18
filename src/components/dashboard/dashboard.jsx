@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import * as select from '../../store/selectors';
+import { selectUser } from '../../store/selectors';
 
 import styles from './dashboard.module.css';
 
@@ -8,31 +9,51 @@ import ChurchForm from './form/churchForm';
 import MapDisplay from './map/map';
 import SpinningWheel from '../helpers/spinningWheel';
 import HoursAdder from './form/hoursAdder/hoursAdder';
+import Introduction from './introduction/introduction';
 
-import { useEnterPressListener } from '../helpers/hooks';
+import * as hooks from '../helpers/hooks';
 
 const Dashboard = (props) => {
-	const user = useSelector(select.selectUser);
+	const user = useSelector(selectUser);
+	const churchSubmitRef = useRef();
+	const addHoursBtnRef = useRef();
 
-	useEnterPressListener(props.showForm, props.searchRef);
+	const [intro, setIntro] = useState();
+
+	useEffect(() => {
+		if (user.showIntro) setIntro(<Introduction />);
+		return () => setIntro();
+	}, [user.showIntro]);
+
+	hooks.useEnterPressListener(props.showForm, props.searchRef);
+	hooks.useSubmitChurchFormKeyListeners(
+		churchSubmitRef,
+		addHoursBtnRef,
+		props.weekSelectRef,
+		props.sundaySelectRef
+	);
 
 	return user.isAuth ? (
-		<section className={styles.dashboard}>
-			<section className={styles.form}>
-				<ChurchList
-					churchlistRef={props.chruchlistRef}
-					searchRef={props.searchRef}
-				/>
-				<ChurchForm />
+		<>
+			{intro}
+			<section className={styles.dashboard}>
+				<section className={styles.form}>
+					<ChurchList
+						churchlistRef={props.chruchlistRef}
+						searchRef={props.searchRef}
+					/>
+					<ChurchForm churchSubmitRef={churchSubmitRef} />
+				</section>
+				<section className={styles['map-and-hours']}>
+					<HoursAdder
+						weekSelectRef={props.weekSelectRef}
+						sundaySelectRef={props.sundaySelectRef}
+						addHoursBtnRef={addHoursBtnRef}
+					/>
+					<MapDisplay />
+				</section>
 			</section>
-			<section className={styles['map-and-hours']}>
-				<HoursAdder
-					weekSelectRef={props.weekSelectRef}
-					sundaySelectRef={props.sundaySelectRef}
-				/>
-				<MapDisplay />
-			</section>
-		</section>
+		</>
 	) : (
 		<SpinningWheel />
 	);

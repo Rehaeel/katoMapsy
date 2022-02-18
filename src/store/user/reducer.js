@@ -4,6 +4,7 @@ const initialUserState = {
 	isAuth: window.localStorage.getItem('name') ? true : false,
 	name: window.localStorage.getItem('name') ?? '',
 	email: '',
+	showIntro: window.localStorage.getItem('hideIntro') ? false : true,
 };
 
 export const userReducer = (state = initialUserState, action) => {
@@ -24,6 +25,18 @@ export const userReducer = (state = initialUserState, action) => {
 			return {
 				isAuth: false,
 				name: '',
+			};
+
+		case actions.USER_SHOW_INTRO:
+			return {
+				...state,
+				showIntro: true,
+			};
+
+		case actions.USER_HIDE_INTRO:
+			return {
+				...state,
+				showIntro: false,
 			};
 
 		default:

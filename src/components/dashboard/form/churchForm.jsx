@@ -19,7 +19,7 @@ import { NameInput } from './inputs/name';
 
 import * as helperFunc from '../../helpers/helperFunctions';
 
-const ChurchForm = () => {
+const ChurchForm = (props) => {
 	const dispatch = useDispatch();
 	const { currentChurch, isFormUpdating, showForm, currentHoursList } =
 		useSelector(selectForm);
@@ -59,6 +59,8 @@ const ChurchForm = () => {
 	useEffect(() => {
 		if (showForm && googleRef.current !== undefined)
 			googleRef.current.focus();
+
+		return () => googleRef.current.blur();
 	}, [showForm, googleRef]);
 
 	useEffect(() => {
@@ -67,21 +69,23 @@ const ChurchForm = () => {
 			googleRef.current.value !== '' &&
 			googleRef.current.value !== undefined;
 
-		if (isLinkPresent) setNameDisabled(true);
-		else setNameDisabled(false);
-
-		(async () => {
-			if (isLinkPresent)
-				return await fetchMapCity(
-					helperFunc.getMapCoords(currentChurch.link)
-				).then((res) => {
+		if (isLinkPresent) {
+			setNameDisabled(true);
+			setAdressDisabled(true);
+			fetchMapCity(helperFunc.getMapCoords(currentChurch.link)).then(
+				(res) => {
 					if (res === undefined) return setCityDisabled(false);
 
 					cityRef.current.value = res;
 					setCityDisabled(true);
-				});
-			else cityRef.current.value = currentChurch.city;
-		})();
+				}
+			);
+		} else {
+			setNameDisabled(false);
+			setAdressDisabled(false);
+			setCityDisabled(false);
+			cityRef.current.value = currentChurch.city;
+		}
 
 		nameRef.current.value = isLinkPresent
 			? helperFunc.getPlaceName(currentChurch.link)
@@ -89,6 +93,16 @@ const ChurchForm = () => {
 		adressRef.current.value = currentChurch.adress;
 		websiteRef.current.value = currentChurch.website;
 	}, [currentChurch]);
+
+	const init = () => {
+		nameRef.current.value = '';
+		cityRef.current.value = '';
+		adressRef.current.value = '';
+		websiteRef.current.value = '';
+		googleRef.current.value = '';
+		setNameDisabled(false);
+		dispatch(actionHideForm());
+	};
 
 	const onLinkChangeHandler = (e) => {
 		const linkValue = e.target.value;
@@ -118,6 +132,7 @@ const ChurchForm = () => {
 					adressRef.current.value =
 						adressRef.current.value.replaceAll('undefined', '');
 					setAdressDisabled(false);
+					adressRef.current.focus();
 				}
 			}
 		});
@@ -149,23 +164,13 @@ const ChurchForm = () => {
 			dispatch(thunks.thunkChurchUpdate(church));
 		}
 
-		nameRef.current.value = '';
-		cityRef.current.value = '';
-		adressRef.current.value = '';
-		websiteRef.current.value = '';
-		googleRef.current.value = '';
-		setNameDisabled(false);
-		dispatch(actionHideForm());
+		init();
 	};
 
 	return (
 		<div
 			className={`${styles.form} ${showForm ? styles['show-form'] : ''}`}>
-			<img
-				src={close}
-				alt='close form'
-				onClick={() => dispatch(actionHideForm())}
-			/>
+			<img src={close} alt='close form' onClick={init} />
 			<h2>Formularz</h2>
 			<form>
 				<GooglePin
@@ -178,8 +183,9 @@ const ChurchForm = () => {
 				<NameInput
 					nameRef={nameRef}
 					nameShrink={nameShrink}
-					gotLink={nameDisabled}
+					nameDisabled={nameDisabled}
 					setNameShrink={setNameShrink}
+					setNameDisabled={setNameDisabled}
 				/>
 
 				<AdreesInput
@@ -214,8 +220,21 @@ const ChurchForm = () => {
 							<HoursList />
 						</>
 					)}
-				<Button type='submit' onClick={onSubmitForm}>
-					{isFormUpdating ? 'Aktualizuj' : 'Dodaj'}
+				<Button
+					type='submit'
+					onClick={onSubmitForm}
+					btnRef={props.churchSubmitRef}>
+					{isFormUpdating ? (
+						<p>
+							Aktualizuj{' '}
+							<span className='grayed-out-light'>[alt + a]</span>
+						</p>
+					) : (
+						<p>
+							Dodaj{' '}
+							<span className='grayed-out-light'>[alt + a]</span>
+						</p>
+					)}
 				</Button>
 			</form>
 		</div>

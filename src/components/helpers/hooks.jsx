@@ -239,7 +239,7 @@ export const useKeyPressListener = (weekSelectRef, searchRef) => {
 			searchRef.current.focus();
 		}
 
-		if (e.altKey && e.code === 'KeyH') weekSelectRef.current.focus();
+		if (e.altKey && e.code === 'KeyT') weekSelectRef.current.focus();
 	};
 
 	useEffect(() => {
@@ -252,6 +252,39 @@ export const useKeyPressListener = (weekSelectRef, searchRef) => {
 			navigate('/login');
 		document.addEventListener('keydown', keyPressListener);
 	}, []);
+};
+
+///////////////////////////////////////////////////////////////
+
+export const useSubmitChurchFormKeyListeners = (
+	churchSubmitRef,
+	addHoursBtnRef,
+	weekSelectRef,
+	sundaySelectRef
+) => {
+	const keyListenerHandler = (e) => {
+		if (
+			churchSubmitRef.current !== undefined &&
+			e.altKey &&
+			e.code === 'KeyA'
+		)
+			churchSubmitRef.current.click();
+		if (
+			addHoursBtnRef.current !== undefined &&
+			e.altKey &&
+			e.code === 'KeyQ'
+		) {
+			addHoursBtnRef.current.click();
+			weekSelectRef.current.blur();
+			sundaySelectRef.current.blur();
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('keydown', keyListenerHandler);
+		return () =>
+			document.removeEventListener('keydown', keyListenerHandler);
+	}, [churchSubmitRef, addHoursBtnRef]);
 };
 
 ///////////////////////////////////////////////////////////////

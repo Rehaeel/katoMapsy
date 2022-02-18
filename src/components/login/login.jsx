@@ -49,7 +49,11 @@ const Login = () => {
 				setShowSpinner(false);
 				setWrongInput(true);
 				if ('current' in emailRef) emailRef.current.focus();
-				if (err.response.status === 400) alert(err.response.data);
+				if (err.response !== undefined) {
+					if (err.response.status === 400) alert(err.response.data);
+				} else {
+					alert(err.message);
+				}
 			});
 	};
 

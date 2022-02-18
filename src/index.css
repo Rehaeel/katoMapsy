@@ -107,6 +107,14 @@ img {
 	color: var(--cl-grayed);
 }
 
+.grayed-out-light {
+	color: rgb(
+		calc(var(--cl-grayed-r) * 1.4),
+		calc(var(--cl-grayed-g) * 1.4),
+		calc(var(--cl-grayed-b) * 1.4)
+	);
+}
+
 .my-position {
 	text-align: center;
 }

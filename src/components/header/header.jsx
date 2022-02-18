@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, selectChurch } from '../../store/selectors';
+import { actionUserShowIntro } from '../../store/user/actionCreator';
 import { thunkLogoutUser } from '../../store/user/thunks';
 
 import styles from './header.module.css';
@@ -12,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import logout from '../icons/log-out.svg';
 import Shortcuts from './shortcuts';
 import github from '../icons/code.svg';
+import intro from '../icons/comment.svg';
 
 const Header = () => {
 	const user = useSelector(selectUser);
@@ -26,7 +28,7 @@ const Header = () => {
 
 	return (
 		<nav className={styles.header}>
-			<div>
+			<div className={styles.icons}>
 				<div className={styles.helpers}>
 					<div className={styles.github}>
 						<img
@@ -41,8 +43,17 @@ const Header = () => {
 						/>
 					</div>
 					<Shortcuts styles={styles} />
+					<div className={styles.intro}>
+						<img
+							src={intro}
+							alt='filmik instruktażowy'
+							onClick={() => {
+								dispatch(actionUserShowIntro());
+							}}
+						/>
+					</div>
 				</div>
-				<img src={logo} alt='logo strony' />
+				<img src={logo} alt='logo strony' className={styles.logo} />
 			</div>
 
 			{user.isAuth && (

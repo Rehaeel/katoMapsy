@@ -8,6 +8,7 @@ import * as formActions from '../../../../store/form/actionCreator';
 import Button from '../../../button/button';
 import ChurchCard from '../card/churchCard';
 import SearchBar from './searchBar/searchBar';
+import { motion, AnimatePresence } from 'framer-motion';
 import enter from '../../../icons/enter.svg';
 
 const ChurchList = (props) => {
@@ -54,52 +55,61 @@ const ChurchList = (props) => {
 					searchRef={props.searchRef}
 					listRef={churchListRef.current}
 				/>
-				<div className={styles.list} ref={churchListRef}>
+				<motion.div layout className={styles.list} ref={churchListRef}>
 					{churches.length === 0 ? (
 						<h4>brak dodanych kościołów</h4>
 					) : (
 						citiesList.map((city) => (
-							<ul
-								key={city}
-								style={{
-									display: `${
-										churches
-											.filter((church) => {
-												if (searchValue === '')
-													return true;
+							<AnimatePresence>
+								<motion.ul
+									layout
+									animate={{ opacity: 1, scale: 1 }}
+									initial={{ opacity: 0, scale: 0 }}
+									exit={{ opacity: 0, scale: 0 }}
+									key={city}
+									style={{
+										display: `${
+											churches
+												.filter((church) => {
+													if (searchValue === '')
+														return true;
 
-												return filterBy(church);
-											})
-											.filter(
-												(church) => church.city === city
-											).length > 0
-											? ''
-											: 'none'
-									}`,
-								}}>
-								<h3>{city}</h3>
-								{churches
-									.filter((church) => {
-										if (searchValue === '') return true;
+													return filterBy(church);
+												})
+												.filter(
+													(church) =>
+														church.city === city
+												).length > 0
+												? ''
+												: 'none'
+										}`,
+									}}>
+									<h3>{city}</h3>
+									{churches
+										.filter((church) => {
+											if (searchValue === '') return true;
 
-										return filterBy(church);
-									})
-									.filter((church) => church.city === city)
-									.map((church) => {
-										return (
-											<ChurchCard
-												key={church.id}
-												name={church.name}
-												onClick={() =>
-													onCardClick(church.id)
-												}
-											/>
-										);
-									})}
-							</ul>
+											return filterBy(church);
+										})
+										.filter(
+											(church) => church.city === city
+										)
+										.map((church) => {
+											return (
+												<ChurchCard
+													key={church.id}
+													name={church.name}
+													onClick={() =>
+														onCardClick(church.id)
+													}
+												/>
+											);
+										})}
+								</motion.ul>
+							</AnimatePresence>
 						))
 					)}
-				</div>
+				</motion.div>
 				<Button
 					onClick={() => {
 						dispatch(formActions.actionResetChurch());

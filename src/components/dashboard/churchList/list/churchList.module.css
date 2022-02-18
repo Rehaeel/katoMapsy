@@ -3,10 +3,10 @@
 	border-radius: 12px;
 	height: 100%;
 	display: flex;
+	flex: 1;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	gap: calc(var(--gap) * 2);
 	padding: var(--gap);
 	padding-top: 0;
 	z-index: 5;
@@ -20,22 +20,46 @@
 
 .church-list > * {
 	width: 100%;
-	height: fit-content;
 }
 
 .list {
 	display: flex;
-	height: calc(100% + 10px);
-	width: 95%;
-	flex-direction: column-reverse;
-	justify-content: flex-end;
+	flex: 1;
+	min-height: 0px;
+	height: 100%;
+	flex-direction: column;
 	align-items: center;
 	gap: calc(var(--gap) * 2);
+	margin-top: calc(var(--gap) * 1.3);
+	padding-bottom: calc(var(--gap) * 2);
+	overflow-x: visible;
 	overflow-y: auto;
 }
 
+.list::-webkit-scrollbar {
+	width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+	background: var(--cl-background-light);
+	border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-track-piece {
+	width: 2px !important;
+}
+
+.list::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background: var(--cl-background-dark);
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+	background: var(--cl-background);
+}
+
 .list > ul {
-	width: 100%;
+	width: 95%;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;

@@ -12,3 +12,11 @@ export const actionSetUser = (name, email) => ({
 export const actionLogoutUser = () => ({
 	type: actions.USER_LOGOUT,
 });
+
+export const actionUserShowIntro = () => ({
+	type: actions.USER_SHOW_INTRO,
+});
+
+export const actionUserHideIntro = () => ({
+	type: actions.USER_HIDE_INTRO,
+});

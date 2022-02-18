@@ -20,16 +20,35 @@ const Shortcuts = ({ styles }) => (
 			</li>
 			<li>
 				<span>
+					[<b>esc</b>]
+				</span>{' '}
+				wyłącz popup z filmikiem instruktarzowym
+			</li>
+
+			<li>
+				<span>
 					[<img src={enter} alt='dodaj kościół' />]
 				</span>{' '}
 				dodaj kościół - włącza formularz dodawania nowego kościoła
 			</li>
 			<li>
 				<span>
-					[<b>alt+h</b>]
+					[<b>alt+t</b>]
 				</span>{' '}
 				zaznaczenie przeskakuje na pierwszą rubrykę w sekcji dodawania
 				godzin w formularzu
+			</li>
+			<li>
+				<span>
+					[<b>alt+q</b>]
+				</span>{' '}
+				dodanie godzin z formularza godzin
+			</li>
+			<li>
+				<span>
+					[<b>alt+a</b>]
+				</span>{' '}
+				dodanie kościoła w formularzu
 			</li>
 		</ul>
 	</div>
