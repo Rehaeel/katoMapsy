@@ -58,3 +58,8 @@
 	font-style: italic;
 	color: var(--cl-grayed);
 }
+
+.intro > iframe {
+	width: 100% !important;
+	aspect-ratio: 16 / 9 !important;
+}
