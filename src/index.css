@@ -81,6 +81,28 @@ img {
 	max-width: 100%;
 }
 
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--cl-background-light);
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-track-piece {
+	width: 2px !important;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background: var(--cl-background-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--cl-background);
+}
+
 .vertical-flex {
 	display: flex;
 	flex-direction: column;

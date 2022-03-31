@@ -36,28 +36,6 @@
 	overflow-y: auto;
 }
 
-.list::-webkit-scrollbar {
-	width: 8px;
-}
-
-.list::-webkit-scrollbar-track {
-	background: var(--cl-background-light);
-	border-radius: 10px;
-}
-
-.list::-webkit-scrollbar-track-piece {
-	width: 2px !important;
-}
-
-.list::-webkit-scrollbar-thumb {
-	border-radius: 5px;
-	background: var(--cl-background-dark);
-}
-
-.list::-webkit-scrollbar-thumb:hover {
-	background: var(--cl-background);
-}
-
 .list > ul {
 	width: 95%;
 	display: flex;
@@ -68,6 +46,8 @@
 }
 
 .list > ul > h3 {
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
 	width: fit-content;
 	border-bottom: 1px solid var(--cl-main);
 	padding: calc(var(--gap) / 2) var(--gap);
@@ -89,6 +69,7 @@
 	width: 100%;
 	margin-top: calc(var(--gap));
 	z-index: 10;
+	position: -webkit-sticky;
 	position: sticky;
 	bottom: 0;
 }
